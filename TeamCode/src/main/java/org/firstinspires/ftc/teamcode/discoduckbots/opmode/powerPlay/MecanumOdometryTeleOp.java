@@ -79,6 +79,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         Servo coneGrabber = hardwareStore.getConeGrabber();
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
         boolean coneArmAtEncoderPos = false;
+        boolean coneTurretEncoderPos = false;
 
        /* blockDetector = new BlockDetector(hardwareStore.getWebcamName(), hardwareMap, new BlockDetectorListener() {
             @Override
@@ -105,6 +106,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             Log.d("LIFT" , "pos : " + coneLift.getCurrentPosition());
+            Log.d("TUR" , "pos : " + coneTurret.getCurrentPosition());
             /* Gamepad 1 */
             {
                 drive.setWeightedDrivePower(
@@ -162,12 +164,19 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             } */
 
             if (gamepad2.dpad_left) {
+                coneTurretEncoderPos = false;
                 coneArm.pivotRight();
             }
             else if (gamepad2.dpad_right) {
+                coneTurretEncoderPos = false;
                 coneArm.pivotLeft();
-            }   else {
+            }   else if (!coneTurretEncoderPos){
                 coneArm.stopPivot();
+            }
+
+            if (gamepad2.x) {
+                coneTurretEncoderPos = true;
+                coneArm.pivotCenter();
             }
 
             if (gamepad2.b) {

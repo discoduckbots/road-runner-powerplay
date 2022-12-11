@@ -18,14 +18,23 @@ public class ConeArm {
     private boolean isClosed = true;
     private boolean buttonPress = false;
 
+    public static final int STACK_1 = 535;
+    public static final int STACK_2 = 396;
+    public static final int STACK_3 = 188;
+    public static final int STACK_4 = 121;
+    public static final int STACK_5 = -62;
+
     public ConeArm(DcMotor coneLift, Servo coneGrabber, DcMotor coneTurret, LinearOpMode opMode) {
         this.coneLift = coneLift;
         this.coneGrabber = coneGrabber;
         this.coneTurret = coneTurret;
         this.opMode = opMode;
+        coneLift.setDirection(DcMotorSimple.Direction.REVERSE);
         coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         coneLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coneLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
     public void drop(LinearOpMode opmode) {
@@ -77,17 +86,6 @@ public class ConeArm {
         }
     }
 
-    public void liftByEncoderAsync(int revolutions) {
-        //if (!resetInProgress) {
-         //   resetInProgress = true;
-
-            coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
-            coneLift.setTargetPosition( revolutions);
-            coneLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //cargoMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            coneLift.setPower(0.5);
-        //}
-    }
 
 
     public void stopIfNotBusy() {
@@ -126,71 +124,19 @@ public class ConeArm {
 
     }
 
-    public void lowerByEncoder(int revolutions){
 
-        coneLift.setDirection(DcMotorSimple.Direction.REVERSE);
-        coneLift.setTargetPosition(coneLift.getCurrentPosition() + revolutions);
-        coneLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //coneLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //cargoMotor.setPower(0.5);
-        while (coneLift.getTargetPosition() > coneLift.getCurrentPosition()){
-            coneLift.setPower(0.5);
-            Log.d("FTC-Arm", "c: " +
-                    coneLift.getCurrentPosition() + " t " + coneLift.getTargetPosition());
-        }
-        //cargoMotor.setPower(0.5);
-       /* while(cargoMotor.isBusy()) {
-
-        }*/
-        coneLift.setPower(0.0);
-
+    public void liftToMedium(){
+     liftByEncoder(2750);
     }
 
-
-    public void grabAndLiftByEncoder(int revolutions, LinearOpMode opMode){
-        release();
-        opMode.sleep(500);
-        coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
-        coneLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        coneLift.setTargetPosition(coneLift.getCurrentPosition() + revolutions);
-
-        while (coneLift.getTargetPosition() > coneLift.getCurrentPosition()){
-            coneLift.setPower(0.5);
-        }
-
-        coneLift.setPower(0.0);
-
-    }
-/*
-    public void liftByEncoder(int revolutions){
-
-        cargoMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        cargoMotor.setTargetPosition(cargoMotor.getCurrentPosition() + revolutions);
-        //cargoMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cargoMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //cargoMotor.setPower(0.5);
-        while (cargoMotor.getTargetPosition() > cargoMotor.getCurrentPosition()){
-            cargoMotor.setPower(0.5);
-            Log.d("FTC-Arm", "c: " +
-                    cargoMotor.getCurrentPosition() + " t " + cargoMotor.getTargetPosition());
-        }
-
-        cargoMotor.setPower(0.0);
-
-    }
-*/
     public void liftByEncoder(int revolutions){
         Log.d("LIFT", "pos: " + coneLift.getCurrentPosition());
-        coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
+       // coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
         coneLift.setTargetPosition(revolutions);
         coneLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //cargoMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         coneLift.setPower(0.75);
 
-      /* while(coneLift.isBusy() && opMode.opModeIsActive()) {
-           Log.d("LIFT", "pos: " + coneLift.getCurrentPosition());
-
-        } */
     }
 
     public void liftInch(LinearOpMode opmode) {
@@ -270,12 +216,30 @@ public class ConeArm {
     public double printServoValue(){
         return coneGrabber.getPosition();
     }
+    public void pivotByEncoder(int revolutions){
+        coneTurret.setTargetPosition(revolutions);
+        coneTurret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        coneTurret.setPower(1.0);
 
+    }
+    public void pivotRight90() {
+        pivotByEncoder(0);
+    }
+
+    public void pivotLeft90() {
+        pivotByEncoder(2177);
+    }
+
+    public void pivotCenter() {
+        pivotByEncoder(1051);
+    }
     public void pivotRight() {
+        coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coneTurret.setPower(0.5);
     }
 
     public void pivotLeft() {
+        coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coneTurret.setPower(-0.5);
     }
 

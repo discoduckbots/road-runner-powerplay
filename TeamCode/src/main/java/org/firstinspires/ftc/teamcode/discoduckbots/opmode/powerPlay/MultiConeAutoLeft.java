@@ -20,13 +20,14 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Autonomous(name="oneConeAuto", group="Robot")
-public class OneConeAuto extends LinearOpMode{
+public class MultiConeAutoLeft extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
     private MecanumDrivetrain mecanumDrivetrain = null;
     private ConeArm coneArm = null;
     TensorFlow tensorFlow = null;
+
 
 
 
@@ -72,7 +73,7 @@ public class OneConeAuto extends LinearOpMode{
                 .build();
 
         Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
-                .lineToLinearHeading( new Pose2d(49.65, 21.50, Math.toRadians(93)),
+                .lineToLinearHeading( new Pose2d(49.65, 22.50, Math.toRadians(93)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -88,7 +89,7 @@ public class OneConeAuto extends LinearOpMode{
                 .build();
 
         Trajectory trajectory5 = drive.trajectoryBuilder(trajectory4.end())
-                .lineToConstantHeading( new Vector2d(49.65, 21.50),
+                .lineToConstantHeading( new Vector2d(49.65, 22.50),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -104,7 +105,7 @@ public class OneConeAuto extends LinearOpMode{
                 .build();
 
         Trajectory trajectory7 = drive.trajectoryBuilder(trajectory6.end())
-                .lineToConstantHeading( new Vector2d(49.65, 21.50),
+                .lineToConstantHeading( new Vector2d(49.65, 22.50),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -120,7 +121,7 @@ public class OneConeAuto extends LinearOpMode{
                 .build();
 
         Trajectory trajectory9 = drive.trajectoryBuilder(trajectory8.end())
-                .lineToConstantHeading( new Vector2d(49.65, 21.50),
+                .lineToConstantHeading( new Vector2d(49.65, 22.50),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -136,7 +137,7 @@ public class OneConeAuto extends LinearOpMode{
                 .build();
 
         Trajectory trajectory11 = drive.trajectoryBuilder(trajectory10.end())
-                .lineToConstantHeading( new Vector2d(49.65, 21.50),
+                .lineToConstantHeading( new Vector2d(49.65, 22.50),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -197,23 +198,45 @@ public class OneConeAuto extends LinearOpMode{
             }
 
             drive.followTrajectory(trajectory1);
-            //coneArm.liftByEncoder(3200);
-            //drive.followTrajectory(trajectory2);
-            //coneArm.open();
-            Log.d("DRIVE", "Before trajectory 3");
+            coneArm.liftToMedium();
             drive.followTrajectory(trajectory2);
-            Log.d("DRIVE", "After trajector3");
-            //lower arm
             coneArm.open();
+            sleep(100);
             //cone 1
+            coneArm.pivotCenter();
+            coneArm.liftByEncoder(ConeArm.STACK_1);
             drive.followTrajectory(trajectory3);
+            coneArm.close();
+            sleep(100);
+            coneArm.liftToMedium();
+            sleep(250);
+            coneArm.pivotLeft90();
             drive.followTrajectory(trajectory4);
+            coneArm.open();
+            sleep(100);
+            coneArm.pivotCenter();
+            coneArm.liftByEncoder(ConeArm.STACK_2);
             // cone 2
             drive.followTrajectory(trajectory5);
+            coneArm.close();
+            sleep(100);
+            coneArm.liftToMedium();
+            sleep(250);
+            coneArm.pivotLeft90();
             drive.followTrajectory(trajectory6);
+            coneArm.open();
+            sleep(100);
+            coneArm.pivotCenter();
+            coneArm.liftByEncoder(ConeArm.STACK_3);
             //cone 3
             drive.followTrajectory(trajectory7);
+            coneArm.close();
+            sleep(100);
+            coneArm.liftToMedium();
+            sleep(250);
+            coneArm.pivotLeft90();
             drive.followTrajectory(trajectory8);
+            coneArm.open();
             //cone4
           //  drive.followTrajectory(trajectory9);
          //   drive.followTrajectory(trajectory10);
@@ -228,6 +251,7 @@ public class OneConeAuto extends LinearOpMode{
              }else {
                  drive.followTrajectory(cone3EndPointTrajectory);
              }
+
 
 
 
