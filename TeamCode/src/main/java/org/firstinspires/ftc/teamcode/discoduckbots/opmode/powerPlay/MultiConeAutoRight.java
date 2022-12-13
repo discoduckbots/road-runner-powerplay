@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous(name="oneConeAuto", group="Robot")
+@Autonomous(name="MultiConeAutoRight", group="Robot")
 public class MultiConeAutoRight extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
@@ -52,19 +52,6 @@ public class MultiConeAutoRight extends LinearOpMode{
         telemetry.update();
 
         Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
-                .lineToConstantHeading( new Vector2d(39.09, 1.42),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-
-
-        /* Trajectory trajectory2 = drive.(new Pose2d())
-                .forward(1)
-                .build();*/
-
-        Trajectory trajectory2 = drive.trajectoryBuilder(trajectory1.end())
                 .lineToConstantHeading( new Vector2d(39.09, 5.65),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
@@ -72,7 +59,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
 
-        Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
+        Trajectory trajectory2 = drive.trajectoryBuilder(trajectory1.end())
                 .lineToLinearHeading( new Pose2d(53.08, -19.37, Math.toRadians(270)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
@@ -80,8 +67,16 @@ public class MultiConeAutoRight extends LinearOpMode{
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
 
-        Trajectory trajectory4 = drive.trajectoryBuilder(trajectory3.end())
+        Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
                 .lineToConstantHeading( new Vector2d(48.44, 13.86),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
+                                DriveConstants.MAX_ANG_VEL/2,
+                                DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
+                .build();
+
+        Trajectory trajectory4 = drive.trajectoryBuilder(trajectory3.end())
+                .lineToConstantHeading( new Vector2d(53.08, -19.37),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -89,7 +84,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                 .build();
 
         Trajectory trajectory5 = drive.trajectoryBuilder(trajectory4.end())
-                .lineToConstantHeading( new Vector2d(53.08, -19.37),
+                .lineToConstantHeading( new Vector2d(48.44, 13.86),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -97,7 +92,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                 .build();
 
         Trajectory trajectory6 = drive.trajectoryBuilder(trajectory5.end())
-                .lineToConstantHeading( new Vector2d(48.44, 13.86),
+                .lineToConstantHeading( new Vector2d(53.08, -19.37),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -105,7 +100,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                 .build();
 
         Trajectory trajectory7 = drive.trajectoryBuilder(trajectory6.end())
-                .lineToConstantHeading( new Vector2d(53.08, -19.37),
+                .lineToConstantHeading( new Vector2d(48.44, 13.86),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -113,7 +108,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                 .build();
 
         Trajectory trajectory8 = drive.trajectoryBuilder(trajectory7.end())
-                .lineToConstantHeading( new Vector2d(48.44, 13.86),
+                .lineToConstantHeading( new Vector2d(53.08, -19.37),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -121,7 +116,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                 .build();
 
         Trajectory trajectory9 = drive.trajectoryBuilder(trajectory8.end())
-                .lineToConstantHeading( new Vector2d(53.08, -19.37),
+                .lineToConstantHeading( new Vector2d(48.44, 13.86),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -129,14 +124,6 @@ public class MultiConeAutoRight extends LinearOpMode{
                 .build();
 
         Trajectory trajectory10 = drive.trajectoryBuilder(trajectory9.end())
-                .lineToConstantHeading( new Vector2d(48.44, 13.86),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-
-        Trajectory trajectory11 = drive.trajectoryBuilder(trajectory10.end())
                 .lineToConstantHeading( new Vector2d(53.08, -19.37),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
@@ -144,7 +131,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
 
-        Trajectory trajectory12 = drive.trajectoryBuilder(trajectory11.end())
+        Trajectory trajectory11 = drive.trajectoryBuilder(trajectory10.end())
                 .lineToConstantHeading( new Vector2d(48.44, 13.86),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
@@ -152,7 +139,7 @@ public class MultiConeAutoRight extends LinearOpMode{
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
 
-        Trajectory last = trajectory8;
+        Trajectory last = trajectory7;
         Trajectory cone1EndPointTrajectory = drive.trajectoryBuilder(last.end())
                 .lineToConstantHeading( new Vector2d(49.65, 21.03),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,

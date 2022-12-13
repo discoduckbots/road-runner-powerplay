@@ -107,6 +107,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             Log.d("LIFT" , "pos : " + coneLift.getCurrentPosition());
             Log.d("TUR" , "pos : " + coneTurret.getCurrentPosition());
+            Log.d("LT:" , "pos: " + gamepad2.left_trigger);
             /* Gamepad 1 */
             {
                 drive.setWeightedDrivePower(
@@ -140,15 +141,18 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
 
 
 
-            if (gamepad2.right_bumper && !coneArmAtEncoderPos) {
+            if (gamepad2.right_bumper) {
                 coneArmAtEncoderPos = true;
                 coneArm.liftByEncoder(4000);
             }
 
             if (gamepad2.left_bumper) {
                 coneArmAtEncoderPos = true;
-                coneArm.stopLiftEncoder();
-
+                coneArm.liftToMedium();
+            }
+            if (gamepad2.left_trigger > 0) {
+                coneArmAtEncoderPos = true;
+                coneArm.liftByEncoder(0);
             }
 
            /* if (-gamepad2.right_stick_y) {
@@ -174,17 +178,20 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
                 coneArm.stopPivot();
             }
 
+
             if (gamepad2.x) {
+                coneTurretEncoderPos = true;
+                coneArm.pivotLeft90();
+            }
+            if (gamepad2.y) {
                 coneTurretEncoderPos = true;
                 coneArm.pivotCenter();
             }
-
             if (gamepad2.b) {
-                coneArm.open();
+                coneTurretEncoderPos = true;
+                coneArm.pivotRight90();
             }
-            if (gamepad2.y) {
-                coneArm.close();
-            }
+
             if (gamepad2.a) {
                 coneArm.onPress();
                 coneArmAtEncoderPos = false;

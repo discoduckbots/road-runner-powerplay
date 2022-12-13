@@ -17,6 +17,7 @@ public class ConeArm {
     private boolean resetInProgress = false;
     private boolean isClosed = true;
     private boolean buttonPress = false;
+    private int currentPosition = 0;
 
     public static final int STACK_1 = 535;
     public static final int STACK_2 = 396;
@@ -29,12 +30,13 @@ public class ConeArm {
         this.coneGrabber = coneGrabber;
         this.coneTurret = coneTurret;
         this.opMode = opMode;
-        coneLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
         coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         coneLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coneLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        currentPosition = coneLift.getCurrentPosition();
 
     }
     public void drop(LinearOpMode opmode) {
@@ -162,8 +164,9 @@ public class ConeArm {
         coneLift.setPower(0.5);
     }
     public void holdPosition() {
+        currentPosition = coneLift.getCurrentPosition();
         coneLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        coneLift.setTargetPosition(coneLift.getCurrentPosition());
+        coneLift.setTargetPosition(currentPosition);
         coneLift.setPower(0.5);
     }
     public void lower(double speed) {
