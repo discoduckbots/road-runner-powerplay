@@ -234,7 +234,7 @@ public class ConeArm {
     }
 
     public void pivotCenter() {
-        pivotByEncoder(1051);
+        pivotByEncoder(1100);
     }
     public void pivotRight() {
         coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
