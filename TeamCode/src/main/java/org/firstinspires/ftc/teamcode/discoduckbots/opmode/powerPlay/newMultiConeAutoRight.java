@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous(name="MultiConeAutoLeft", group="Robot")
-public class MultiConeAutoLeft extends LinearOpMode{
+@Autonomous(name="newMultiConeAutoRight", group="Robot")
+public class newMultiConeAutoRight extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
@@ -49,7 +49,7 @@ public class MultiConeAutoLeft extends LinearOpMode{
 
         // place initial cone
         Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
-                .lineToLinearHeading( new Pose2d(39.995, -2.42, Math.toRadians(8.14)),
+                .lineToLinearHeading( new Pose2d(39.995, 2.42, Math.toRadians(8.14)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
