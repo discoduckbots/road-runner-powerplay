@@ -128,7 +128,7 @@ public class ConeArm {
 
 
     public void liftToMedium(){
-     liftByEncoder(2750);
+     liftByEncoder(2800);
     }
 
     public void liftByEncoder(int revolutions){
@@ -157,6 +157,7 @@ public class ConeArm {
     }
     public void resetPositionAs0 () {
         coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
     public void stopLiftEncoder() {
         coneLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);

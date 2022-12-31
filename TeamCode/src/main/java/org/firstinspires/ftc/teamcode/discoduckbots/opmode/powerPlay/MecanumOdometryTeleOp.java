@@ -143,7 +143,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
 
             if (gamepad2.right_bumper) {
                 coneArmAtEncoderPos = true;
-                coneArm.liftByEncoder(4000);
+                coneArm.liftByEncoder(4050);
             }
 
             if (gamepad2.left_bumper) {
@@ -153,7 +153,12 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             if (gamepad2.left_trigger > 0) {
                 coneArmAtEncoderPos = true;
                 coneArm.liftByEncoder(0);
+                coneArm.pivotByEncoder(0);
             }
+
+       /*     if (gamepad2.left_trigger > 0) {
+                coneArm.resetPositionAs0();
+            } */
 
            /* if (-gamepad2.right_stick_y) {
                 coneArm.lower(ARM_SPEED);
