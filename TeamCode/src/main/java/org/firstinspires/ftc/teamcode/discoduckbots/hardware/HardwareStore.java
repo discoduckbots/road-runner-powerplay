@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 public class HardwareStore {
     private MecanumDrivetrain mecanumDrivetrain;
@@ -70,11 +71,15 @@ public class HardwareStore {
 
 */
 
-        BNO055IMU gyro = hardwareMap.get(BNO055IMU.class, "imu");
-        imu = new IMU(gyro);
-        imu.initialize();
+        //BNO055IMU gyro = hardwareMap.get(BNO055IMU.class, "imu");
+       // imu = new IMU(gyro);
+       // imu.initialize();
+        hardwareMap.get(DcMotorEx.class, "backLeft").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardwareMap.get(DcMotorEx.class, "rightEncoder").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hardwareMap.get(DcMotorEx.class, "frontEncoder").setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        mecanumDrivetrain = createDrivetrain(telemetry, opMode, imu, colorSensor, frontLeft, frontRight, backLeft, backRight);
+
+        // mecanumDrivetrain = createDrivetrain(telemetry, opMode, imu, colorSensor, frontLeft, frontRight, backLeft, backRight);
     }
 
     protected MecanumDrivetrain createDrivetrain(Telemetry telemetry,

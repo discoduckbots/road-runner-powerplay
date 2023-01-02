@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
 import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 @Autonomous(name="TrajTest", group="Robot")
 public class TrajTest extends LinearOpMode{
@@ -62,12 +64,24 @@ public class TrajTest extends LinearOpMode{
                                 DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
+        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
+        Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
+        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+
 
        waitForStart();
-
+        Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
+                " L:"+leftEncoder.getCurrentPosition() +
+                " F:"+frontEncoder.getCurrentPosition());
        for (int i = 0; i < 10; i++) {
            drive.followTrajectory(trajectory1);
+           Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
+                   " L:"+leftEncoder.getCurrentPosition() +
+                   " F:"+frontEncoder.getCurrentPosition());
            drive.followTrajectory(trajectory2);
+           Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
+                   " L:"+leftEncoder.getCurrentPosition() +
+                   " F:"+frontEncoder.getCurrentPosition());
        }
 
 

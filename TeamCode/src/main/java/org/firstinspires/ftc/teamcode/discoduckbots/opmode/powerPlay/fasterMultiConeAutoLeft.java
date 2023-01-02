@@ -99,7 +99,7 @@ public class fasterMultiConeAutoLeft extends LinearOpMode{
                 .build();
         // pick up cup 2
         Trajectory trajectory4 = drive.trajectoryBuilder(trajectory4a.end())
-                .lineToLinearHeading( new Pose2d(49, -11.64, Math.toRadians(90)),
+                .lineToLinearHeading( new Pose2d(48.5, -11.64, Math.toRadians(90)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),

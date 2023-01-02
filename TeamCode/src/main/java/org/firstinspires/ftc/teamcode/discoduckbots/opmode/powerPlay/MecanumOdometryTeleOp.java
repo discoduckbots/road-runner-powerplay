@@ -34,6 +34,7 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -41,6 +42,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeArm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 
 /**
@@ -80,6 +82,9 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
         boolean coneArmAtEncoderPos = false;
         boolean coneTurretEncoderPos = false;
+        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
+        Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
+        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
 
        /* blockDetector = new BlockDetector(hardwareStore.getWebcamName(), hardwareMap, new BlockDetectorListener() {
             @Override
@@ -105,6 +110,9 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
+                    " L:"+leftEncoder.getCurrentPosition() +
+                    " F:"+frontEncoder.getCurrentPosition());
             Log.d("LIFT" , "pos : " + coneLift.getCurrentPosition());
             Log.d("TUR" , "pos : " + coneTurret.getCurrentPosition());
             Log.d("LT:" , "pos: " + gamepad2.left_trigger);
