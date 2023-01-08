@@ -75,7 +75,7 @@ public class fasterMultiConeAutoRight extends LinearOpMode{
 
         // go to pick up cup 1
         Trajectory trajectory2 = drive.trajectoryBuilder(trajectory1a.end())
-                .lineToLinearHeading( new Pose2d(52.0, -19.16, Math.toRadians(269.70)),
+                .lineToLinearHeading( new Pose2d(52.50, -18.46, Math.toRadians(269.70)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -83,7 +83,7 @@ public class fasterMultiConeAutoRight extends LinearOpMode{
                 .build();
         // drop cup 1
         Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
-                .lineToLinearHeading( new Pose2d(48.60, 14.25, Math.toRadians(275.45)),
+                .lineToLinearHeading( new Pose2d(47.0, 14.25, Math.toRadians(275.45)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -92,7 +92,7 @@ public class fasterMultiConeAutoRight extends LinearOpMode{
         // updated changes (not tested) end here
         // moves forward a little
         Trajectory trajectory4a = drive.trajectoryBuilder(trajectory3.end())
-                .lineToLinearHeading( new Pose2d(53.75, -18.90, Math.toRadians(269.70)),
+                .lineToLinearHeading( new Pose2d(52.0, -18.90, Math.toRadians(269.70)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -253,17 +253,17 @@ public class fasterMultiConeAutoRight extends LinearOpMode{
             coneArm.liftByEncoder(ConeArm.STACK_2);
             drive.followTrajectory(trajectory4a);
             coneArm.close();
-            sleep(250);
+            sleep(225);
             coneArm.liftToMedium();
-            sleep(250);
+            sleep(225);
             coneArm.pivotRight90();
             drive.followTrajectory(trajectory3);
             coneArm.open();
 
             //3rd stack cone
-            sleep(250);
+            sleep(200);
             coneArm.pivotCenter();
-            //sleep(250);
+            sleep(200);
             coneArm.liftByEncoder(ConeArm.STACK_3);
             drive.followTrajectory(trajectory4a);
             coneArm.close();
@@ -278,11 +278,11 @@ public class fasterMultiConeAutoRight extends LinearOpMode{
             //fourth stack cone
             sleep(250);
             coneArm.pivotCenter();
-            //sleep(250);
+            sleep(200);
             coneArm.liftByEncoder(ConeArm.STACK_4);
             drive.followTrajectory(trajectory4a);
             coneArm.close();
-            sleep(250);
+            sleep(220);
             coneArm.liftToMedium();
             sleep(250);
             coneArm.pivotRight90();

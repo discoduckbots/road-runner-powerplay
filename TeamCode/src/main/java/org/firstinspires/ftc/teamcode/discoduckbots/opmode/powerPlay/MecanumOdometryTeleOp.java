@@ -82,9 +82,9 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
         boolean coneArmAtEncoderPos = false;
         boolean coneTurretEncoderPos = false;
-        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
+        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
         Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
 
        /* blockDetector = new BlockDetector(hardwareStore.getWebcamName(), hardwareMap, new BlockDetectorListener() {
             @Override
