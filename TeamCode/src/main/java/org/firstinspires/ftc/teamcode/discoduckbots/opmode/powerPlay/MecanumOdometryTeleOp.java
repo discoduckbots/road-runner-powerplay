@@ -61,8 +61,8 @@ import org.firstinspires.ftc.teamcode.util.Encoder;
 public class MecanumOdometryTeleOp extends LinearOpMode {
 
     private static double THROTTLE = 0.7;
-    private static double STRAFE_THROTTLE = 0.5;
-    private static double TURN_THROTTLE = 0.5;
+    private static double STRAFE_THROTTLE = 0.7;
+    private static double TURN_THROTTLE = 0.7;
     private static double intakeSpeed = .81;
     private static final double ARM_SPEED = 1;
 
@@ -82,10 +82,10 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
         boolean coneArmAtEncoderPos = false;
         boolean coneTurretEncoderPos = false;
-        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
+       /* Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
         Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
         Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
-
+*/
        /* blockDetector = new BlockDetector(hardwareStore.getWebcamName(), hardwareMap, new BlockDetectorListener() {
             @Override
             public void onBlockDetected(boolean grabber, boolean zone1, boolean zone2) {
@@ -110,9 +110,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
-                    " L:"+leftEncoder.getCurrentPosition() +
-                    " F:"+frontEncoder.getCurrentPosition());
+
             Log.d("LIFT" , "pos : " + coneLift.getCurrentPosition());
             Log.d("TUR" , "pos : " + coneTurret.getCurrentPosition());
             Log.d("LT:" , "pos: " + gamepad2.left_trigger);

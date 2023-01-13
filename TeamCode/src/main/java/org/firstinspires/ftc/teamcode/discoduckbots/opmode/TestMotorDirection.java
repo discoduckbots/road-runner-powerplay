@@ -31,12 +31,13 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
-import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
+
+
 
 
 /**
@@ -59,79 +60,94 @@ public class TestMotorDirection extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private MecanumDrivetrain mecanumDrivetrain = null;
     /* private Intake intake = null;
     private Shooter shooter = null;
     private WobbleMover wobbleMover = null;
     private TouchSensor touchSensor = null;
     private ColorSensor colorSensor = null; */
-    private static final double AUTONOMOUS_SPEED = 0.4;
+    private static final double AUTONOMOUS_SPEED = 0.25;
     @Override
     public void runOpMode() {
-        HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);
-        mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();
-      /*   intake = hardwareStore.getIntake();
-        shooter = hardwareStore.getShooter();
-        wobbleMover = hardwareStore.getWobbleMover();
-        touchSensor = hardwareStore.getTouchSensor();
-        colorSensor = hardwareStore.getColorSensor(); */
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "backRight");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+
+      /*   intake = getIntake();
+        shooter = getShooter();
+        wobbleMover = getWobbleMover();
+        touchSensor = getTouchSensor();
+        colorSensor = getColorSensor(); */
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        int brPos = hardwareStore.backRight.getCurrentPosition();
-        int frPos = hardwareStore.frontRight.getCurrentPosition();
-        int blPos = hardwareStore.backLeft.getCurrentPosition();
-        int flPos = hardwareStore.frontLeft.getCurrentPosition();
-        hardwareStore.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardwareStore.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        hardwareStore.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardwareStore.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        hardwareStore.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardwareStore.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        hardwareStore.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hardwareStore.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         while (opModeIsActive()) {
-            double[] angles = hardwareStore.getImu().printAngles();
+           /* double[] angles = getImu().printAngles();
             telemetry.addData("IMU 1:" + angles[0]+ " 2:" + angles[1] + " 3:" + angles[2], "");
-            telemetry.addData("br Pos change: " + hardwareStore.backRight.getDirection() + " " ,
-                    hardwareStore.backRight.getCurrentPosition() - brPos);
-            telemetry.addData("fr Pos change: " + hardwareStore.frontRight.getDirection() + " ",
-                    hardwareStore.frontRight.getCurrentPosition() - frPos);
-            telemetry.addData("bl Pos change: " + hardwareStore.backLeft.getDirection() + " ",
-                    hardwareStore.backLeft.getCurrentPosition() - blPos);
-            telemetry.addData("fl Pos change: " + hardwareStore.frontLeft.getDirection() + " ",
-                    hardwareStore.frontLeft.getCurrentPosition() - flPos);
-            telemetry.update();
+            telemetry.addData("br Pos change: " + backRight.getDirection() + " " ,
+                    backRight.getCurrentPosition() - brPos);
+            telemetry.addData("fr Pos change: " + frontRight.getDirection() + " ",
+                    frontRight.getCurrentPosition() - frPos);
+            telemetry.addData("bl Pos change: " + backLeft.getDirection() + " ",
+                    backLeft.getCurrentPosition() - blPos);
+            telemetry.addData("fl Pos change: " + frontLeft.getDirection() + " ",
+                    frontLeft.getCurrentPosition() - flPos);
+            telemetry.update();*/
 
             if (gamepad1.a) {
                 telemetry.addData("Presing a", "");
                 telemetry.update();
-                //hardwareStore.backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-                hardwareStore.backLeft.setPower(AUTONOMOUS_SPEED);
+                //backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+                backLeft.setPower(AUTONOMOUS_SPEED);
             }else {
-                hardwareStore.backLeft.setPower(0);
+                backLeft.setPower(0);
             }
 
             if (gamepad1.y) {
-               // hardwareStore.backRight.setDirection(DcMotorSimple.Direction.FORWARD);
-                hardwareStore.backRight.setPower(AUTONOMOUS_SPEED);
+               // backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+                backRight.setPower(AUTONOMOUS_SPEED);
             }else {
-                hardwareStore.backRight.setPower(0);
+                backRight.setPower(0);
             }
             if (gamepad1.b) {
-               // hardwareStore.frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-                hardwareStore.frontLeft.setPower(AUTONOMOUS_SPEED);
+               // frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+                frontLeft.setPower(AUTONOMOUS_SPEED);
             }else {
-                hardwareStore.frontLeft.setPower(0);
+                frontLeft.setPower(0);
             }
 
             if (gamepad1.x) {
 
-               // hardwareStore.frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
-                hardwareStore.frontRight.setPower(AUTONOMOUS_SPEED);
+               // frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+                frontRight.setPower(AUTONOMOUS_SPEED);
             }else {
-                hardwareStore.frontRight.setPower(0);
+                frontRight.setPower(0);
+            }
+
+            if (gamepad1.left_bumper) {
+                frontRight.setPower(AUTONOMOUS_SPEED);
+                frontLeft.setPower(AUTONOMOUS_SPEED);
+                backLeft.setPower(AUTONOMOUS_SPEED);
+                backRight.setPower(AUTONOMOUS_SPEED);
+            }
+
+            if (gamepad1.right_bumper) {
+                frontRight.setPower(-1 * AUTONOMOUS_SPEED);
+                frontLeft.setPower(-1 * AUTONOMOUS_SPEED);
+                backLeft.setPower(-1 * AUTONOMOUS_SPEED);
+                backRight.setPower(-1 * AUTONOMOUS_SPEED);
             }
         }
 
@@ -166,8 +182,6 @@ public class TestMotorDirection extends LinearOpMode {
     }
 
     private void shutDown(){
-        mecanumDrivetrain.stop();
-        //intake.stop();
-        //shooter.stop();
+
     }
 }
