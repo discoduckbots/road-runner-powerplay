@@ -149,7 +149,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
 
             if (gamepad2.right_bumper) {
                 coneArmAtEncoderPos = true;
-                coneArm.liftByEncoder(4050);
+                coneArm.liftByEncoder(2800);
             }
 
             if (gamepad2.left_bumper) {

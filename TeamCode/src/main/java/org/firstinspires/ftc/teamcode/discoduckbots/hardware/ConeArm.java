@@ -128,7 +128,7 @@ public class ConeArm {
 
 
     public void liftToMedium(){
-     liftByEncoder(2800);
+     liftByEncoder(1500);
     }
 
     public void liftByEncoder(int revolutions){
@@ -231,11 +231,11 @@ public class ConeArm {
     }
 
     public void pivotLeft90() {
-        pivotByEncoder(2177);
+        pivotByEncoder(2600);
     }
 
     public void pivotCenter() {
-        pivotByEncoder(1100);
+        pivotByEncoder(800);
     }
     public void pivotRight() {
         coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
