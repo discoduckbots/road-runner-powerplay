@@ -50,7 +50,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
 
         // place initial cone
         Trajectory dropPreload = drive.trajectoryBuilder(new Pose2d())
-                .lineToLinearHeading( new Pose2d(45, -3.5, Math.toRadians(1)),
+                .lineToLinearHeading( new Pose2d(39.35, -3.05, Math.toRadians(0.58)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -58,7 +58,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
                 .build(); //prev y: -2.42, -1.55
         // move forward to move cup
         Trajectory pushSignal = drive.trajectoryBuilder((dropPreload.end()))
-                .lineToLinearHeading( new Pose2d(70, -2, Math.toRadians(1)),
+                .lineToLinearHeading( new Pose2d(47.16, -1.03, Math.toRadians(0.7)),
                     SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                             DriveConstants.TRACK_WIDTH),
@@ -66,7 +66,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
                 .build();
 
         Trajectory comeBackAfterPushSignal = drive.trajectoryBuilder(pushSignal.end())
-                .lineToLinearHeading( new Pose2d(51, -2, Math.toRadians(1)),
+                .lineToLinearHeading( new Pose2d(47, -1.08, Math.toRadians(0.22)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -75,7 +75,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
 
         // go to pick up cup 1
         Trajectory grabStack1First = drive.trajectoryBuilder(comeBackAfterPushSignal.end())
-                .lineToLinearHeading( new Pose2d(61, 24, Math.toRadians(75)),
+                .lineToLinearHeading( new Pose2d(50.35, 23.31, Math.toRadians(75)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -84,7 +84,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
         printOdometry(telemetry, drive);
         // drop cup 1
         Trajectory dropStack1 = drive.trajectoryBuilder(grabStack1First.end())
-                .lineToLinearHeading( new Pose2d(49, -12.33, Math.toRadians(75)),
+                .lineToConstantHeading( new Vector2d(49.28, -12.51),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -92,7 +92,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
                 .build();
 
         Trajectory grabStack1 = drive.trajectoryBuilder(dropStack1.end())
-                .lineToLinearHeading( new Pose2d(63, 24, Math.toRadians(75)),
+                .lineToLinearHeading( new Pose2d(50.35, 23.31, Math.toRadians(75)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
@@ -141,7 +141,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
         // pick up cup 2
 
 
-        Trajectory last = dropStack1;
+        Trajectory last = pushSignal;
         Trajectory cone1EndPointTrajectory = drive.trajectoryBuilder(last.end())
                 .lineToConstantHeading( new Vector2d(49.81, 23.33),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
@@ -178,14 +178,19 @@ public class newMultiConeAutoLeft extends LinearOpMode{
                 conePosition = ConeDetector.SIDE_1;
             }
 
+            // Drop the preload
             coneArm.liftToMedium();
             drive.followTrajectory(dropPreload);
             coneArm.open();
             sleep(250);
+
+            // push the signal cone out of the way and come back
             drive.followTrajectory(pushSignal);
             drive.followTrajectory(comeBackAfterPushSignal);
+
+            // Go to pick up the first cone
             coneArm.pivotCenter();
-            sleep(450);
+            sleep(450); // WHY DO WE NEED THIS SLEEP ?
             coneArm.liftByEncoder(ConeArm.STACK_1);
             drive.followTrajectory(grabStack1First);
             coneArm.close();
@@ -195,13 +200,15 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.liftToMedium();
             sleep(300);
             coneArm.pivotLeft90();
+
+            // Go to drop the stack 1 cone
             drive.followTrajectory(dropStack1);
             currPos = drive.getPoseEstimate();
             Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
 
             coneArm.open();
 
-            //second stack cone
+            // Go to pick up second stack cone
             sleep(250);
             coneArm.pivotCenter();
             coneArm.liftByEncoder(ConeArm.STACK_2);
@@ -211,13 +218,15 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.liftToMedium();
             sleep(300);
             coneArm.pivotLeft90();
+
+            // Go to drop second stack cone
             drive.followTrajectory(dropStack1);
             currPos = drive.getPoseEstimate();
             Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
 
             coneArm.open();
 
-            //third stack cone
+            //Go to grab third stack cone
             sleep(250);
             coneArm.pivotCenter();
             coneArm.liftByEncoder(ConeArm.STACK_3);
@@ -227,6 +236,8 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.liftToMedium();
             sleep(300);
             coneArm.pivotLeft90();
+
+            // Go to drop third stack cone
             drive.followTrajectory(dropStack1);
             currPos = drive.getPoseEstimate();
             Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
@@ -281,7 +292,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
                  drive.followTrajectory(cone3EndPointTrajectory);
              }
 
-             //coneArm.pivotRight90();
+             coneArm.pivotRight90();
              //coneArm.liftByEncoder(0);
 
 
