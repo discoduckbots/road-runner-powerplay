@@ -64,24 +64,15 @@ public class TrajTest extends LinearOpMode{
                                 DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
-        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
 
 
         waitForStart();
-        Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
-                " L:"+leftEncoder.getCurrentPosition() +
-                " F:"+frontEncoder.getCurrentPosition());
+
        for (int i = 0; i < 10; i++) {
            drive.followTrajectory(trajectory1);
-           Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
-                   " L:"+leftEncoder.getCurrentPosition() +
-                   " F:"+frontEncoder.getCurrentPosition());
+
            drive.followTrajectory(trajectory2);
-           Log.d("ODOMETRY" ,"R:"+rightEncoder.getCurrentPosition() +
-                   " L:"+leftEncoder.getCurrentPosition() +
-                   " F:"+frontEncoder.getCurrentPosition());
+
        }
 
 

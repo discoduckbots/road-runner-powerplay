@@ -6,12 +6,12 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeArm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeDetector;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
@@ -19,16 +19,16 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
 import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-@Disabled
-@Autonomous(name="MultiConeAutoRight", group="Robot")
-public class MultiConeAutoRight extends LinearOpMode{
+
+@Autonomous(name="newMultiConeAutoLeft", group="Robot")
+public class newMultiConeAutoLeft extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
     private MecanumDrivetrain mecanumDrivetrain = null;
     private ConeArm coneArm = null;
     TensorFlow tensorFlow = null;
-    private static final double AUTONOMOUS_SPEED = 0.4;
+    private static final double AUTONOMOUS_SPEED = 1;
 
     private static final double ROTATION_SPEED = 0.4;
     private static final int WOBBLE_GRABBER_REVOLUTIONS = 6250;
@@ -49,105 +49,77 @@ public class MultiConeAutoRight extends LinearOpMode{
         telemetry.update();
 
         // place initial cone
-        Trajectory trajectory1 = drive.trajectoryBuilder(new Pose2d())
-                .lineToLinearHeading( new Pose2d(40.00, 4.74, Math.toRadians(3.31)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
+        Trajectory dropPreload = drive.trajectoryBuilder(new Pose2d())
+                .lineToLinearHeading( new Pose2d(45, -3.5, Math.toRadians(1)),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED))
+                .build(); //prev y: -2.42, -1.55
         // move forward to move cup
-        Trajectory trajectory1aa = drive.trajectoryBuilder((trajectory1.end()))
-                .lineToLinearHeading( new Pose2d(57.08, 3.86, Math.toRadians(359.89)),
-                    SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                DriveConstants.MAX_ANG_VEL/1.6,
+        Trajectory pushSignal = drive.trajectoryBuilder((dropPreload.end()))
+                .lineToLinearHeading( new Pose2d(70, -2, Math.toRadians(1)),
+                    SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
+                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                             DriveConstants.TRACK_WIDTH),
-                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
+                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED))
                 .build();
 
-        Trajectory trajectory1a = drive.trajectoryBuilder(trajectory1aa.end())
-                .lineToLinearHeading( new Pose2d(48.85, 4.15, Math.toRadians(357.92)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/1.6,
+        Trajectory comeBackAfterPushSignal = drive.trajectoryBuilder(pushSignal.end())
+                .lineToLinearHeading( new Pose2d(51, -2, Math.toRadians(1)),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED))
                 .build();
 
         // go to pick up cup 1
-        Trajectory trajectory2 = drive.trajectoryBuilder(trajectory1a.end())
-                .lineToLinearHeading( new Pose2d(52.0, -19.66, Math.toRadians(269.70)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
+        Trajectory grabStack1First = drive.trajectoryBuilder(comeBackAfterPushSignal.end())
+                .lineToLinearHeading( new Pose2d(61, 24, Math.toRadians(75)),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
                                 DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED))
                 .build();
+        printOdometry(telemetry, drive);
         // drop cup 1
-        Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
-                .lineToLinearHeading( new Pose2d(48.60, 14.25, Math.toRadians(275.45)),
+        Trajectory dropStack1 = drive.trajectoryBuilder(grabStack1First.end())
+                .lineToLinearHeading( new Pose2d(49, -12.33, Math.toRadians(75)),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED))
+                .build();
+
+        Trajectory grabStack1 = drive.trajectoryBuilder(dropStack1.end())
+                .lineToLinearHeading( new Pose2d(63, 24, Math.toRadians(75)),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,
+                                DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED))
+                .build();
+
+
+        Trajectory grabStack2 = drive.trajectoryBuilder(dropStack1.end())
+                .lineToLinearHeading( new Pose2d(-10.64, -11.77, Math.toRadians(176.26)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
-        // updated changes (not tested) end here
+
+
+        Trajectory dropStack2 = drive.trajectoryBuilder(grabStack2.end())
+                .lineToLinearHeading( new Pose2d(48.5, -11.64, Math.toRadians(90)),
+                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
+                                DriveConstants.MAX_ANG_VEL/2,
+                                DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
+                .build();
+
         // moves forward a little
-        Trajectory trajectory4a = drive.trajectoryBuilder(trajectory3.end())
-                .lineToLinearHeading( new Pose2d(53.75, -19.16, Math.toRadians(269.70)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        // pick up cup 2
-        Trajectory trajectory4 = drive.trajectoryBuilder(trajectory4a.end())
-                .lineToLinearHeading( new Pose2d(54, -19.16, Math.toRadians(269.70)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        // drop cup 2
-        Trajectory trajectory5 = drive.trajectoryBuilder(trajectory4.end())
-                .lineToLinearHeading( new Pose2d(48.33, -10.64, Math.toRadians(90)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        // moves forward a little
-        Trajectory trajectory6a = drive.trajectoryBuilder(trajectory5.end())
-                .lineToLinearHeading( new Pose2d(48.33, 10.64, Math.toRadians(90)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        // pick up cup 3
-        Trajectory trajectory6 = drive.trajectoryBuilder(trajectory6a.end())
-                .lineToLinearHeading( new Pose2d(48.33, 22.74, Math.toRadians(93)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        //drop cup 3
-        Trajectory trajectory7 = drive.trajectoryBuilder(trajectory6.end())
-                .lineToLinearHeading( new Pose2d(48.33, -10.64, Math.toRadians(90)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        // moves forward a little
-        Trajectory trajectory8a = drive.trajectoryBuilder(trajectory7.end())
-                .lineToLinearHeading( new Pose2d(48.33, 10.64, Math.toRadians(90)),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        // pick up cup 4
-        Trajectory trajectory8 = drive.trajectoryBuilder(trajectory8a.end())
+
+        Trajectory grabStack3 = drive.trajectoryBuilder(dropStack2.end())
                 .lineToLinearHeading( new Pose2d(48.33, 22.74, Math.toRadians(90)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
@@ -155,53 +127,37 @@ public class MultiConeAutoRight extends LinearOpMode{
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
 
-        Trajectory trajectory9 = drive.trajectoryBuilder(trajectory8.end())
-                .lineToConstantHeading( new Vector2d(48.33, -11.78),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        Trajectory trajectory10a = drive.trajectoryBuilder(trajectory9.end())
-                .lineToConstantHeading( new Vector2d(48.33, 10.74),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
-        Trajectory trajectory10 = drive.trajectoryBuilder(trajectory10a.end())
-                .lineToLinearHeading( new Pose2d(48.33, 22.74, Math.toRadians(93)),
+        Trajectory dropStack3 = drive.trajectoryBuilder(grabStack3.end())
+                .lineToLinearHeading( new Pose2d(48, -11.64, Math.toRadians(90)),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
 
-        Trajectory trajectory11 = drive.trajectoryBuilder(trajectory10.end())
-                .lineToConstantHeading( new Vector2d(48.33, -11.78),
-                        SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
-                                DriveConstants.MAX_ANG_VEL/2,
-                                DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
-                .build();
 
-        Trajectory last = trajectory3;
+        // moves forward a little
+
+        // pick up cup 2
+
+
+        Trajectory last = dropStack1;
         Trajectory cone1EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(49.90, 23.03),
+                .lineToConstantHeading( new Vector2d(49.81, 23.33),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
         Trajectory cone2EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(49.65, 0.56),
+                .lineToConstantHeading( new Vector2d(50.21, 0.50),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/2))
                 .build();
         Trajectory cone3EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(49.65, -23.05),
+                .lineToConstantHeading( new Vector2d(50.28, -22.85),
                         SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/2,
                                 DriveConstants.MAX_ANG_VEL/2,
                                 DriveConstants.TRACK_WIDTH),
@@ -223,57 +179,59 @@ public class MultiConeAutoRight extends LinearOpMode{
             }
 
             coneArm.liftToMedium();
-            coneArm.pivotLeft90();
-            drive.followTrajectory(trajectory1);
+            drive.followTrajectory(dropPreload);
             coneArm.open();
             sleep(250);
-            drive.followTrajectory(trajectory1aa);
-            drive.followTrajectory(trajectory1a);
+            drive.followTrajectory(pushSignal);
+            drive.followTrajectory(comeBackAfterPushSignal);
             coneArm.pivotCenter();
-            //sleep(250);
+            sleep(450);
             coneArm.liftByEncoder(ConeArm.STACK_1);
-            drive.followTrajectory(trajectory2);
+            drive.followTrajectory(grabStack1First);
             coneArm.close();
             Pose2d currPos = drive.getPoseEstimate();
             Log.d("1 PICK POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
             sleep(250);
             coneArm.liftToMedium();
-            sleep(250);
-            coneArm.pivotRight90();
-            drive.followTrajectory(trajectory3);
+            sleep(300);
+            coneArm.pivotLeft90();
+            drive.followTrajectory(dropStack1);
             currPos = drive.getPoseEstimate();
             Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
+
             coneArm.open();
-            sleep(250);
 
             //second stack cone
-
+            sleep(250);
             coneArm.pivotCenter();
-            //sleep(250);
             coneArm.liftByEncoder(ConeArm.STACK_2);
-            drive.followTrajectory(trajectory4a);
+            drive.followTrajectory(grabStack1);
             coneArm.close();
             sleep(250);
             coneArm.liftToMedium();
-            sleep(250);
-            coneArm.pivotRight90();
-            drive.followTrajectory(trajectory3);
+            sleep(300);
+            coneArm.pivotLeft90();
+            drive.followTrajectory(dropStack1);
+            currPos = drive.getPoseEstimate();
+            Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
+
             coneArm.open();
 
-            //3rd stack cone
+            //third stack cone
             sleep(250);
             coneArm.pivotCenter();
-            //sleep(250);
             coneArm.liftByEncoder(ConeArm.STACK_3);
-            drive.followTrajectory(trajectory4a);
+            drive.followTrajectory(grabStack1);
             coneArm.close();
             sleep(250);
             coneArm.liftToMedium();
-            sleep(250);
-            coneArm.pivotRight90();
-            drive.followTrajectory(trajectory3);
-            coneArm.open();
+            sleep(300);
+            coneArm.pivotLeft90();
+            drive.followTrajectory(dropStack1);
+            currPos = drive.getPoseEstimate();
+            Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + currPos.getHeading());
 
+            coneArm.open();
             //sleep(250);
             /* drive.followTrajectory(trajectory4a);
             coneArm.pivotCenter();
@@ -323,7 +281,9 @@ public class MultiConeAutoRight extends LinearOpMode{
                  drive.followTrajectory(cone3EndPointTrajectory);
              }
 
-             coneArm.liftByEncoder(0);
+             //coneArm.pivotRight90();
+             //coneArm.liftByEncoder(0);
+
 
 
 
@@ -331,6 +291,14 @@ public class MultiConeAutoRight extends LinearOpMode{
             //telemetry.addData("cone",conePosition);
             //telemetry.update();
         }
+    }
+
+    void printOdometry(Telemetry telemetry, SampleMecanumDrive drive) {
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("BINU x", poseEstimate.getX());
+        telemetry.addData("y", poseEstimate.getY());
+        telemetry.addData("heading", poseEstimate.getHeading());
+        telemetry.update();
     }
 
 

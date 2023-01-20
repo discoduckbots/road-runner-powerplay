@@ -19,18 +19,18 @@ public class ConeArm {
     private boolean buttonPress = false;
     private int currentPosition = 0;
 
-    public static final int STACK_1 = 535;
-    public static final int STACK_2 = 396;
-    public static final int STACK_3 = 188;
-    public static final int STACK_4 = 121;
-    public static final int STACK_5 = -62;
+    public static final int STACK_1 = 353;
+    public static final int STACK_2 = 230;
+    public static final int STACK_3 = 115;
+    public static final int STACK_4 = 23;
+    public static final int STACK_5 = 0;
 
     public ConeArm(DcMotor coneLift, Servo coneGrabber, DcMotor coneTurret, LinearOpMode opMode) {
         this.coneLift = coneLift;
         this.coneGrabber = coneGrabber;
         this.coneTurret = coneTurret;
         this.opMode = opMode;
-        coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
+        coneLift.setDirection(DcMotorSimple.Direction.REVERSE);
         coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         coneLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coneLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -128,7 +128,7 @@ public class ConeArm {
 
 
     public void liftToMedium(){
-     liftByEncoder(1500);
+     liftByEncoder(2013);
     }
 
     public void liftByEncoder(int revolutions){
@@ -231,11 +231,11 @@ public class ConeArm {
     }
 
     public void pivotLeft90() {
-        pivotByEncoder(2600);
+        pivotByEncoder(1471);
     }
 
     public void pivotCenter() {
-        pivotByEncoder(800);
+        pivotByEncoder(735);
     }
     public void pivotRight() {
         coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
