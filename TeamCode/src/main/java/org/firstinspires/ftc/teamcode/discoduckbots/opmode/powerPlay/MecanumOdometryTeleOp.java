@@ -114,6 +114,8 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             Log.d("LIFT" , "pos : " + coneLift.getCurrentPosition());
             Log.d("TUR" , "pos : " + coneTurret.getCurrentPosition());
             Log.d("LT:" , "pos: " + gamepad2.left_trigger);
+
+
             /* Gamepad 1 */
             {
                 drive.setWeightedDrivePower(
@@ -131,6 +133,9 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
                 telemetry.addData("y", poseEstimate.getY());
                 telemetry.addData("heading", poseEstimate.getHeading());
                 telemetry.update();
+                Log.d("LOC", "x = " + poseEstimate.getX() +
+                        " y= " + poseEstimate.getY() +
+                        " heading " + poseEstimate.getHeading());
             }
             if (gamepad2.dpad_down) {
                 coneArmAtEncoderPos = false;
