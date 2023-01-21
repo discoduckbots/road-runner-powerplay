@@ -127,20 +127,30 @@ public class newMultiConeAutoLeft extends LinearOpMode{
 
         // pick up cup 2
 
+        Trajectory forward = drive.trajectoryBuilder(new Pose2d())
+                .forward(30)
+                .build();
 
-        Trajectory last = dropStack3;
+        Trajectory last = forward;
         Trajectory cone1EndPointTrajectory = drive.trajectoryBuilder(last.end())
                 .lineToConstantHeading( new Vector2d(49.81, 23.33),
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory cone2EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(50.21, 0.50),
+                .lineToConstantHeading( new Vector2d(50.18, -1.08),
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory cone3EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(50.28, -22.85),
+                .lineToConstantHeading( new Vector2d(49.28, -22.51),
                         velocityConstraint, accelerationConstraint)
                 .build();
+        Trajectory cone1EndPointStrafe = drive.trajectoryBuilder(last.end())
+                .strafeLeft(25)
+                .build();
+        Trajectory cone3EndPointStrafe = drive.trajectoryBuilder(last.end())
+                .strafeRight(25)
+                .build();
+
 
         waitForStart();
 
@@ -157,17 +167,17 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             }
 
             // Drop the preload
-            coneArm.liftToMedium();
-            drive.followTrajectory(dropPreload);
-            coneArm.open();
-            sleep(250);
+            //coneArm.liftToMedium();
+            //drive.followTrajectory(dropPreload);
+            //coneArm.open();
+            //sleep(250);
 
             // push the signal cone out of the way and come back
-            drive.followTrajectory(pushSignal);
-            drive.followTrajectory(comeBackAfterPushSignal);
+            //drive.followTrajectory(pushSignal);
+            /*drive.followTrajectory(comeBackAfterPushSignal);
 
             // Go to pick up the first cone
-            coneArm.pivotCenter();
+            /*coneArm.pivotCenter();
             sleep(450); // WHY DO WE NEED THIS SLEEP ?
             coneArm.liftByEncoder(ConeArm.STACK_1);
             drive.followTrajectory(grabStack1);
@@ -180,7 +190,7 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.pivotLeft90();
 
             // Go to drop the stack 1 cone
-            drive.followTrajectory(dropStack1);
+            *rive.followTrajectory(dropStack1);
             currPos = drive.getPoseEstimate();
             Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
 /*
@@ -265,16 +275,16 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             // cone 5
           //  drive.followTrajectory(trajectory11);
           //  drive.followTrajectory(trajectory12); */
-
+            drive.followTrajectory(forward);
              if (conePosition.equals(ConeDetector.SIDE_1)) {
-               drive.followTrajectory(cone1EndPointTrajectory);
-            } else if (conePosition.equals(ConeDetector.SIDE_2)){
-                 drive.followTrajectory(cone2EndPointTrajectory);
-             }else {
-                 drive.followTrajectory(cone3EndPointTrajectory);
+               drive.followTrajectory(cone1EndPointStrafe);
+            } else if (conePosition.equals(ConeDetector.SIDE_3)){
+                 drive.followTrajectory(cone3EndPointStrafe);
              }
 
-             coneArm.pivotRight90();
+
+
+             //coneArm.pivotRight90();
              //coneArm.liftByEncoder(0);
 
 

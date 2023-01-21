@@ -216,6 +216,14 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             }
         }
 
+        if (gamepad1.left_bumper) {
+            THROTTLE = 0.5;
+        }
+
+        if (gamepad1.right_bumper) {
+            THROTTLE = 0.7;
+        }
+
 
         telemetry.addData("MecanumOdometryTeleOp", "Stopping");
 
