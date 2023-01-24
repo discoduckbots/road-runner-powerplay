@@ -154,7 +154,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
 
             if (gamepad2.right_bumper) {
                 coneArmAtEncoderPos = true;
-                coneArm.liftByEncoder(2800);
+                coneArm.liftByEncoder(2900);
             }
 
             if (gamepad2.left_bumper) {
@@ -163,8 +163,8 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             }
             if (gamepad2.left_trigger > 0) {
                 coneArmAtEncoderPos = true;
-                coneArm.liftByEncoder(0);
-                coneArm.pivotByEncoder(0);
+                coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
 
        /*     if (gamepad2.left_trigger > 0) {

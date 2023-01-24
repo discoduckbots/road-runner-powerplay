@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.powerPlay;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
@@ -22,8 +21,8 @@ import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous(name="Strafe1Auto", group="Robot")
-public class strafe1Cone extends LinearOpMode{
+@Autonomous(name="Park1ConeRight", group="Robot")
+public class Park1ConeRight extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;
     private ElapsedTime runtime = new ElapsedTime();
@@ -65,28 +64,31 @@ public class strafe1Cone extends LinearOpMode{
         Pose2d DROP_STACK2_POS = new Pose2d(48.5, -11.64, Math.toRadians(70));
         Pose2d DROP_STACK3_POS = new Pose2d(48, -11.64, Math.toRadians(70));
         Trajectory forward = drive.trajectoryBuilder(new Pose2d())
-                .forward(39)
+                .forward(38)
                 .build();
 
-        Trajectory strafeRightToPole = drive.trajectoryBuilder(forward.end())
-                .strafeRight(3)
+        Trajectory strafeLeftToPole = drive.trajectoryBuilder(forward.end())
+                .strafeLeft(4.5)
                 .build();
 
-        Trajectory strafeLeftAwayFromPole = drive.trajectoryBuilder(strafeRightToPole.end())
-                .strafeLeft(3)
+        Trajectory strafeRightAwayFromPole = drive.trajectoryBuilder(strafeLeftToPole.end())
+                .strafeRight(4.5)
                 .build();
 
-        Trajectory backwards = drive.trajectoryBuilder(strafeLeftAwayFromPole.end())
+        Trajectory backwards = drive.trajectoryBuilder(strafeRightAwayFromPole.end())
                 .back(9)
                 .build();
 
         Trajectory last = backwards;
 
         Trajectory cone1EndPointStrafe = drive.trajectoryBuilder(last.end())
-                .strafeLeft(25)
+                .strafeLeft(28)
+                .build();
+        Trajectory cone2EndPointStrafe = drive.trajectoryBuilder(last.end())
+                .strafeLeft(2)
                 .build();
         Trajectory cone3EndPointStrafe = drive.trajectoryBuilder(last.end())
-                .strafeRight(25)
+                .strafeRight(22)
                 .build();
 
 
@@ -106,23 +108,29 @@ public class strafe1Cone extends LinearOpMode{
 
             // Drop the preload
             coneArm.liftToMedium();
+            sleep(150);
+            coneArm.pivotLeft90();
             drive.followTrajectory(forward);
-            drive.followTrajectory(strafeRightToPole);
+            drive.followTrajectory(strafeLeftToPole);
+            sleep(2000);
             coneArm.open();
-            sleep(250);
-            drive.followTrajectory(strafeLeftAwayFromPole);
+            sleep(600);
+            drive.followTrajectory(strafeRightAwayFromPole);
             drive.followTrajectory(backwards);
 
+            coneArm.pivotRight90();
 
              if (conePosition.equals(ConeDetector.SIDE_1)) {
                drive.followTrajectory(cone1EndPointStrafe);
             } else if (conePosition.equals(ConeDetector.SIDE_3)){
                  drive.followTrajectory(cone3EndPointStrafe);
+             } else {
+                 drive.followTrajectory((cone2EndPointStrafe));
              }
 
             coneArm.liftByEncoder(0);
 
-             //coneArm.pivotRight90();
+
              //coneArm.liftByEncoder(0);
 
 

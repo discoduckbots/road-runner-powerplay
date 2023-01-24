@@ -128,7 +128,7 @@ public class ConeArm {
 
 
     public void liftToMedium(){
-     liftByEncoder(2013);
+     liftByEncoder(2075);
     }
 
     public void liftByEncoder(int revolutions){
