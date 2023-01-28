@@ -35,9 +35,12 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeArm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 
@@ -80,6 +83,9 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         DcMotor coneTurret = hardwareStore.getConeTurret();
         Servo coneGrabber = hardwareStore.getConeGrabber();
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
+        TouchSensor turretSensor = hardwareStore.getTurretSensor();
+        //DistanceSensor distanceSensor = hardwareStore.getDistanceSensor();
+        DistanceSensor distanceSensor2 = hardwareStore.getDistanceSensor2();
         boolean coneArmAtEncoderPos = false;
         boolean coneTurretEncoderPos = false;
        /* Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
@@ -223,6 +229,18 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         if (gamepad1.right_bumper) {
             THROTTLE = 0.7;
         }
+
+        if (turretSensor.isPressed()) {
+            coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+        Log.d("DIST", "distance " + distanceSensor2.getDistance(DistanceUnit.CM));
+        if (distanceSensor2.getDistance(DistanceUnit.CM) < 5) {
+
+            telemetry.addData("Detected", distanceSensor2.getDistance(DistanceUnit.CM));
+
+        }
+
 
 
         telemetry.addData("MecanumOdometryTeleOp", "Stopping");

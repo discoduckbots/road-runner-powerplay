@@ -24,21 +24,15 @@ public class HardwareStore {
     private DistanceSensor distanceSensor = null;
     private DistanceSensor distanceSensor2 = null;
     private DistanceSensor blockSensor = null;
-    private TouchSensor upperLimit = null;
-    private TouchSensor lowerLimit = null;
     private WebcamName webcam = null;
-    //private DigitalChannel upperLimit = null;
-    //private DigitalChannel lowerlimit = null;
-
+    public TouchSensor turretSensor;
     public DcMotorEx frontLeft ;
     public DcMotorEx frontRight ;
     public DcMotorEx backRight ;
     public DcMotorEx backLeft ;
-    //public DcMotor intakeMotor;
     public DcMotor coneTurret;
     public DcMotor coneLift;
     public Servo coneGrabber;
-   // public Servo intakePusher;
     //public RevBlinkinLedDriver ledDriver;
 
     public HardwareStore(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
@@ -53,23 +47,11 @@ public class HardwareStore {
         // frontRight.setDirection(DcMotorEx.Direction.FORWARD);
        //  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
-        //upperLimit = hardwareMap.get(TouchSensor.class, "upperLimit");
-        //lowerLimit = hardwareMap.get(TouchSensor.class, "lowerLimit");
+        //turretSensor = hardwareMap.get(TouchSensor.class, "turretSensor");
+        //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensorLeft");
+        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensorRight");
 
-        //cargoGrabber = new CargoGrabber(cargoMotor, cargoServo);
-       // DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, "intake");
-        //intakePusher = hardwareMap.get(Servo.class, "intakePusher");
-       /* intake = new Intake(intakeMotor, intakePusher);
 
-        DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, "shooter");
-        Servo pusherServo = hardwareMap.get(Servo.class, "pusher");
-        shooter = new Shooter(shooterMotor, pusherServo);
-
-        DcMotor wobbleMoverMotor = hardwareMap.get(DcMotor.class, "wobbleMover");
-        Servo wobbleGrabber = hardwareMap.get(Servo.class, "wobbleGrabber");
-        wobbleMover = new WobbleMover(wobbleMoverMotor, wobbleGrabber);
-
-*/
 
         //BNO055IMU gyro = hardwareMap.get(BNO055IMU.class, "imu");
        //imu = new IMU(gyro);
@@ -110,6 +92,8 @@ public class HardwareStore {
     public DistanceSensor getDistanceSensor() { return distanceSensor; }
     public DistanceSensor getDistanceSensor2() { return distanceSensor2; }
     public DistanceSensor getBlockSensor() { return blockSensor; }
+
+    public TouchSensor getTurretSensor() { return turretSensor; }
 
 
     public ConeArm getConeArm() { return coneArm;}
