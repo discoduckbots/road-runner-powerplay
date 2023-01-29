@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -44,7 +48,13 @@ public class BackAndForth extends LinearOpMode {
 
         waitForStart();
 
+        Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontRight"));
+        Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
+        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "middleEncoder"));
         while (opModeIsActive() && !isStopRequested()) {
+            Log.d("ENC" , "left: " + leftEncoder.getCurrentPosition() +
+                    " right: " + rightEncoder.getCurrentPosition() + "middle: " +
+                    frontEncoder.getCurrentPosition());
             drive.followTrajectory(trajectoryForward);
             drive.followTrajectory(trajectoryBackward);
         }

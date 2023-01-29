@@ -141,7 +141,7 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
                 telemetry.update();
                 Log.d("LOC", "x = " + poseEstimate.getX() +
                         " y= " + poseEstimate.getY() +
-                        " heading " + poseEstimate.getHeading());
+                        " heading " + Math.toDegrees(poseEstimate.getHeading()));
             }
             if (gamepad2.dpad_down) {
                 coneArmAtEncoderPos = false;

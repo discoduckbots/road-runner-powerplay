@@ -56,12 +56,12 @@ public class newMultiConeAutoLeft extends LinearOpMode{
         TrajectoryAccelerationConstraint accelerationConstraint =
         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED);
 
-        Pose2d POLE_POSITION_VERTICAL = new Pose2d(39.35, -3.05, Math.toRadians(0.58));
-        Pose2d PUSH_SLEEVE_CONE_TO_POSITION = new Pose2d(57.60, -1.03, Math.toRadians(0.7));
-        Pose2d COME_BACK_AFTER_PUSH_SLEEVE_CONE_POSITION = new Pose2d(50.18, -1.08, Math.toRadians(0.22));
-        Pose2d GRAB_STACK = new Pose2d(50.35, 23.31, Math.toRadians(70));
+        Pose2d POLE_POSITION_VERTICAL = new Pose2d(39.38, -5.8225, Math.toRadians(353.234));
+        Pose2d PUSH_SLEEVE_CONE_TO_POSITION = new Pose2d(55.63, -3.26, 6.260953467542549);
+        Pose2d COME_BACK_AFTER_PUSH_SLEEVE_CONE_POSITION = new Pose2d(48.72, -2.89, 6.262412017657919);
+        Pose2d GRAB_STACK = new Pose2d(59.94, 21.78, 1.572847406205808);
         Pose2d GRAB_STACK_3 = new Pose2d(48.33, 22.74, Math.toRadians(70));
-        Pose2d DROP_STACK_POS = new Pose2d(49.28, -12.51, Math.toRadians(70));
+        Pose2d DROP_STACK_POS = new Pose2d(48.38, -14.69, 1.5899080227065339);
         Pose2d DROP_STACK2_POS = new Pose2d(48.5, -11.64, Math.toRadians(70));
         Pose2d DROP_STACK3_POS = new Pose2d(48, -11.64, Math.toRadians(70));
         // place initial cone
@@ -123,33 +123,27 @@ public class newMultiConeAutoLeft extends LinearOpMode{
                 .build();
 
 
-        // moves forward a little
 
-        // pick up cup 2
 
-        Trajectory forward = drive.trajectoryBuilder(new Pose2d())
-                .forward(30)
-                .build();
-
-        Trajectory last = forward;
+        Trajectory last = dropStack3;
         Trajectory cone1EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(49.81, 23.33),
+                .lineToConstantHeading( new Vector2d(48.398, 22.88),
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory cone2EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(50.18, -1.08),
+                .lineToConstantHeading( new Vector2d(48.42, -0.49),
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory cone3EndPointTrajectory = drive.trajectoryBuilder(last.end())
-                .lineToConstantHeading( new Vector2d(49.28, -22.51),
+                .lineToConstantHeading( new Vector2d(48.66, -24.17),
                         velocityConstraint, accelerationConstraint)
                 .build();
-        Trajectory cone1EndPointStrafe = drive.trajectoryBuilder(last.end())
+       /* Trajectory cone1EndPointStrafe = drive.trajectoryBuilder(last.end())
                 .strafeLeft(25)
                 .build();
         Trajectory cone3EndPointStrafe = drive.trajectoryBuilder(last.end())
                 .strafeRight(25)
-                .build();
+                .build();*/
 
 
         waitForStart();
@@ -167,22 +161,32 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             }
 
             // Drop the preload
-            //coneArm.liftToMedium();
-            //drive.followTrajectory(dropPreload);
-            //coneArm.open();
-            //sleep(250);
+            coneArm.liftToMedium();
+            drive.followTrajectory(dropPreload);
+            Pose2d currPos = drive.getPoseEstimate();
+            Log.d("POLE POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
+
+            coneArm.open();
+            sleep(250);
 
             // push the signal cone out of the way and come back
-            //drive.followTrajectory(pushSignal);
-            /*drive.followTrajectory(comeBackAfterPushSignal);
+            drive.followTrajectory(pushSignal);
+            currPos = drive.getPoseEstimate();
+            Log.d("PUSH SIGNAL POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
+
+
+            drive.followTrajectory(comeBackAfterPushSignal);
+            currPos = drive.getPoseEstimate();
+            Log.d("BACK FROM PUSH POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
+
 
             // Go to pick up the first cone
-            /*coneArm.pivotCenter();
+            coneArm.pivotCenter();
             sleep(450); // WHY DO WE NEED THIS SLEEP ?
             coneArm.liftByEncoder(ConeArm.STACK_1);
             drive.followTrajectory(grabStack1);
             coneArm.close();
-            Pose2d currPos = drive.getPoseEstimate();
+            currPos = drive.getPoseEstimate();
             Log.d("1 PICK POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
             sleep(250);
             coneArm.liftToMedium();
@@ -190,10 +194,10 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.pivotLeft90();
 
             // Go to drop the stack 1 cone
-            *rive.followTrajectory(dropStack1);
+            drive.followTrajectory(dropStack1);
             currPos = drive.getPoseEstimate();
             Log.d("1 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
-/*
+
             coneArm.open();
 
             // Go to pick up second stack cone
@@ -275,11 +279,13 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             // cone 5
           //  drive.followTrajectory(trajectory11);
           //  drive.followTrajectory(trajectory12); */
-            drive.followTrajectory(forward);
+            //drive.followTrajectory(forward);
              if (conePosition.equals(ConeDetector.SIDE_1)) {
-               drive.followTrajectory(cone1EndPointStrafe);
-            } else if (conePosition.equals(ConeDetector.SIDE_3)){
-                 drive.followTrajectory(cone3EndPointStrafe);
+                 drive.followTrajectory(cone1EndPointTrajectory);
+             } else if (conePosition.equals(ConeDetector.SIDE_2)) {
+                 drive.followTrajectory(cone2EndPointTrajectory);
+            } else {
+                 drive.followTrajectory(cone3EndPointTrajectory);
              }
 
 
