@@ -22,8 +22,7 @@ public class HardwareStore {
     private ColorSensor colorSensor = null;
     private TouchSensor touchSensor = null;
     private DistanceSensor distanceSensor = null;
-    private DistanceSensor distanceSensor2 = null;
-    private DistanceSensor blockSensor = null;
+
     private WebcamName webcam = null;
     public TouchSensor turretSensor;
     public DcMotorEx frontLeft ;
@@ -48,8 +47,8 @@ public class HardwareStore {
        //  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         //turretSensor = hardwareMap.get(TouchSensor.class, "turretSensor");
-        //distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensorLeft");
-        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensorRight");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        //distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensorRight");
 
 
 
@@ -90,8 +89,6 @@ public class HardwareStore {
 
     //public TouchSensor getArmStoppingSensor() { return armStoppingSensor; }
     public DistanceSensor getDistanceSensor() { return distanceSensor; }
-    public DistanceSensor getDistanceSensor2() { return distanceSensor2; }
-    public DistanceSensor getBlockSensor() { return blockSensor; }
 
     public TouchSensor getTurretSensor() { return turretSensor; }
 

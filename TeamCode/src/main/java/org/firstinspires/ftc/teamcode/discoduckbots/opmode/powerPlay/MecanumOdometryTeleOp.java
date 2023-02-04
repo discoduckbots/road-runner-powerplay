@@ -84,8 +84,8 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         Servo coneGrabber = hardwareStore.getConeGrabber();
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
         TouchSensor turretSensor = hardwareStore.getTurretSensor();
-        //DistanceSensor distanceSensor = hardwareStore.getDistanceSensor();
-        DistanceSensor distanceSensor2 = hardwareStore.getDistanceSensor2();
+        DistanceSensor distanceSensor = hardwareStore.getDistanceSensor();
+        //DistanceSensor distanceSensor2 = hardwareStore.getDistanceSensor2();
         boolean coneArmAtEncoderPos = false;
         boolean coneTurretEncoderPos = false;
        /* Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
@@ -234,12 +234,13 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-        Log.d("DIST", "distance " + distanceSensor2.getDistance(DistanceUnit.CM));
-        if (distanceSensor2.getDistance(DistanceUnit.CM) < 5) {
+       Log.d("DIST", "distance " + distanceSensor.getDistance(DistanceUnit.CM));
+
+        /*if (distanceSensor2.getDistance(DistanceUnit.CM) < 5) {
 
             telemetry.addData("Detected", distanceSensor2.getDistance(DistanceUnit.CM));
 
-        }
+        } */
 
 
 

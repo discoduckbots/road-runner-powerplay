@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -23,14 +22,14 @@ import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous(name="newMultiConeAutoLeft", group="Robot")
-public class newMultiConeAutoLeft extends LinearOpMode{
+@Autonomous(name="fasternewMultiConeAutoLeft", group="Robot")
+public class newfasterMultiConeAutoLeft extends LinearOpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
     private MecanumDrivetrain mecanumDrivetrain = null;
     private ConeArm coneArm = null;
     TensorFlow tensorFlow = null;
-    private static final double AUTONOMOUS_SPEED = .5;
+    private static final double AUTONOMOUS_SPEED = .75;
 
 
     @Override
@@ -247,6 +246,9 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.pivotLeft90();
 
             // Go to drop third stack cone
+
+
+
             drive.followTrajectory(dropStack1Back);
             currPos = drive.getPoseEstimate();
             Log.d("3 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
@@ -254,7 +256,45 @@ public class newMultiConeAutoLeft extends LinearOpMode{
             coneArm.open();
             sleep(250);
 
+            sleep(250);
+            coneArm.pivotCenter();
+            coneArm.liftByEncoder(ConeArm.STACK_4);
+            drive.followTrajectory(grabStack3);
+            Log.d("3 GRAB POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
 
+            coneArm.close();
+            sleep(250);
+            coneArm.liftToMedium();
+            sleep(300);
+            coneArm.pivotLeft90();
+
+            // Go to drop third stack cone
+            drive.followTrajectory(dropStack1Back);
+            currPos = drive.getPoseEstimate();
+            Log.d("3 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
+
+            coneArm.open();
+
+
+
+            sleep(250);
+            coneArm.pivotCenter();
+            coneArm.liftByEncoder(ConeArm.STACK_5);
+            drive.followTrajectory(grabStack3);
+            Log.d("3 GRAB POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
+
+            coneArm.close();
+            sleep(250);
+            coneArm.liftToMedium();
+            sleep(300);
+            coneArm.pivotLeft90();
+
+            // Go to drop third stack cone
+            drive.followTrajectory(dropStack1Back);
+            currPos = drive.getPoseEstimate();
+            Log.d("3 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
+
+            coneArm.open();
             /* drive.followTrajectory(trajectory4a);
             coneArm.pivotCenter();
             coneArm.liftByEncoder(ConeArm.STACK_2);

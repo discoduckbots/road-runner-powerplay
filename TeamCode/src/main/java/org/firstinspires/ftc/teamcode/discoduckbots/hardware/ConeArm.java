@@ -19,10 +19,10 @@ public class ConeArm {
     private boolean buttonPress = false;
     private int currentPosition = 0;
 
-    public static final int STACK_1 = 353;
-    public static final int STACK_2 = 230;
-    public static final int STACK_3 = 115;
-    public static final int STACK_4 = 23;
+    public static final int STACK_1 = 378;
+    public static final int STACK_2 = 255;
+    public static final int STACK_3 = 140;
+    public static final int STACK_4 = 50;
     public static final int STACK_5 = 0;
 
     public ConeArm(DcMotor coneLift, Servo coneGrabber, DcMotor coneTurret, LinearOpMode opMode) {
@@ -235,7 +235,7 @@ public class ConeArm {
     }
 
     public void pivotCenter() {
-        pivotByEncoder(735);
+        pivotByEncoder(787);
     }
     public void pivotRight() {
         coneTurret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
