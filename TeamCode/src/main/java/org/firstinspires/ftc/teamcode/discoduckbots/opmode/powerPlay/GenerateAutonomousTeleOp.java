@@ -35,10 +35,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -47,10 +45,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeArm;
 import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
-
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.util.Encoder;
+
+import java.util.ArrayList;
 
 
 /**
@@ -65,29 +63,27 @@ import org.firstinspires.ftc.teamcode.util.Encoder;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Odometry Teleop", group="Linear Opmode")
-public class MecanumOdometryTeleOp extends LinearOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Gen Autonomous Teleop", group="Linear Opmode")
+public class GenerateAutonomousTeleOp extends LinearOpMode {
 
-    private static final double DISTANCE_TO_POLE = 100;
     private static double THROTTLE = 0.7;
     private static double STRAFE_THROTTLE = 0.7;
     private static double TURN_THROTTLE = 0.7;
     private static double intakeSpeed = .81;
     private static final double ARM_SPEED = 1;
-
+    boolean leftBumperPressed = false;
+    boolean rightBumperPressed = false;
+    TrajectoryVelocityConstraint velocityConstraint = SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * THROTTLE,
+            DriveConstants.MAX_ANG_VEL * THROTTLE,
+            DriveConstants.TRACK_WIDTH);
+    TrajectoryAccelerationConstraint accelerationConstraint =
+            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * THROTTLE);
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    private Pose2d lastPosition = null;
-    boolean lastPositionPressed = false;
 
     @Override
     public void runOpMode() {
-        TrajectoryVelocityConstraint velocityConstraint = SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL * THROTTLE,
-                DriveConstants.MAX_ANG_VEL * THROTTLE,
-                DriveConstants.TRACK_WIDTH);
-        TrajectoryAccelerationConstraint accelerationConstraint =
-                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * THROTTLE);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -97,18 +93,40 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
         Servo coneGrabber = hardwareStore.getConeGrabber();
         ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);
         TouchSensor turretSensor = hardwareStore.getTurretSensor();
-        DistanceSensor distanceSensor = hardwareStore.getDistanceSensor();
-        //DistanceSensor distanceSensor2 = hardwareStore.getDistanceSensor2();
+        //DistanceSensor distanceSensor = hardwareStore.getDistanceSensor();
+
         boolean coneArmAtEncoderPos = false;
         boolean coneTurretEncoderPos = false;
-
-
+       /* Encoder leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
+        Encoder rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
+        Encoder frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "backLeft"));
+*/
+       /* blockDetector = new BlockDetector(hardwareStore.getWebcamName(), hardwareMap, new BlockDetectorListener() {
+            @Override
+            public void onBlockDetected(boolean grabber, boolean zone1, boolean zone2) {
+                Log.d("ftc-opencv", "Cargo grabber " + grabber + " zone1 " + zone1 + " zone2  " + zone2);
+                if ((grabber && zone1) ||
+                        (grabber && zone2) ||
+                        (zone1 && zone2)) {
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                } else if (grabber) {
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+                } else if (zone1){
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+                } else if (zone2) {
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.HOT_PINK);
+                } else {
+                    ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+                }
+            }
+        }, hardwareStore.getBlockSensor());
+*/
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         while (opModeIsActive()) {
 
-            Log.d("LIFT" , "pos : " + coneLift.getCurrentPosition());
+            Log.d("LIFT BINU" , "pos : " + coneLift.getCurrentPosition());
             Log.d("TUR" , "pos : " + coneTurret.getCurrentPosition());
             Log.d("LT:" , "pos: " + gamepad2.left_trigger);
 
@@ -165,7 +183,6 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
             }
 
 
-
             if (gamepad2.dpad_left) {
                 coneTurretEncoderPos = false;
                 coneArm.pivotRight();
@@ -198,50 +215,30 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
                 coneArm.onRelease();
             }
 
-            if (gamepad1.left_bumper) {
-                THROTTLE = 0.5;
-            }
-
-            if (gamepad1.right_bumper) {
-                THROTTLE = 0.7;
-            }
             if (gamepad1.dpad_up) {
-                lastPosition = drive.getPoseEstimate();
-                Log.d("LAST", "Setting last position to " + lastPosition);
-            }
-            if (gamepad1.b) {
-                if (lastPositionPressed == false) {
-                    lastPositionPressed = true;
-                    if (lastPosition != null) {
-
-                        Trajectory trajectory = drive.trajectoryBuilder(drive.getPoseEstimate())
-                                .lineToLinearHeading(lastPosition,
-                                        velocityConstraint, accelerationConstraint)
-                                .build();
-                        Log.d("LAST", "Going to last Pos from " + trajectory.start() + " to " + trajectory.end());
-                        drive.followTrajectory(trajectory);
-                    }
+                Log.d("GEN", "LB " + gamepad1.left_bumper + " LBP " + leftBumperPressed);
+                if(!leftBumperPressed){
+                    leftBumperPressed = true;
+                    addAutonomousPoint(drive);
                 }
-            } else {
-                lastPositionPressed = false;
+            } else{
+                leftBumperPressed = false;
             }
 
-            if (turretSensor.isPressed()) {
-                Log.d("TURSEN", "turret sensor activated ");
+            if (gamepad1.dpad_down) {
+                if(!rightBumperPressed) {
+                    rightBumperPressed = true;
+                    completeAutonomousPath(drive);
+                }
+            }
+            else{
+                rightBumperPressed = false;
+            }
+
+            /*if (turretSensor.isPressed()) {
                 coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 coneTurret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            } else {
-                Log.d("TURSEN", "turret sensor NOT activated ");
-            }
-            Log.d("DIST", "distance " + distanceSensor.getDistance(DistanceUnit.CM));
-
-            if (distanceSensor.getDistance(DistanceUnit.CM) < DISTANCE_TO_POLE) {
-                telemetry.addData("Detected", distanceSensor.getDistance(DistanceUnit.CM));
-                hardwareStore.ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
-            } else {
-                hardwareStore.ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-            }
-
+            }*/
         }
 
 
@@ -251,8 +248,44 @@ public class MecanumOdometryTeleOp extends LinearOpMode {
 
         shutDown();
     }
+    public ArrayList<Trajectory> arrayList = new ArrayList<Trajectory>();
+    private void completeAutonomousPath(SampleMecanumDrive drive) {
+        Pose2d newEnd= new Pose2d (0,0,0);
+        Trajectory firstTrajectory = drive.trajectoryBuilder(arrayList.get(arrayList.size() - 1).end())
+                .lineToLinearHeading( newEnd,
+                velocityConstraint, accelerationConstraint)
+                .build();
+
+        Log.d("GEN", "Moving to " + firstTrajectory);
+        drive.followTrajectory(firstTrajectory);
+        for(Trajectory trajectory: arrayList){
+            Log.d("GEN", "Moving to " + trajectory);
+            drive.followTrajectory(trajectory);
+        }
+    }
+
+    private void addAutonomousPoint( SampleMecanumDrive drive  ) {
+
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        Pose2d end = new Pose2d(poseEstimate.getX(), poseEstimate.getY(),  poseEstimate.getHeading());
+        Pose2d start;
+        if(arrayList.size()==0){
+            start = new Pose2d(0,0,0);
+        }
+        else{
+            start = arrayList.get(arrayList.size() - 1).end();
+        }
+        Trajectory trajectory = drive.trajectoryBuilder(start)
+                .lineToLinearHeading( end,
+                        velocityConstraint, accelerationConstraint)
+                .build();
+
+                arrayList.add(trajectory);
+                Log.d("GEN", "Adding Pos " + start + " to " + arrayList.size());
+    }
 
     private void shutDown(){
 
     }
+
 }

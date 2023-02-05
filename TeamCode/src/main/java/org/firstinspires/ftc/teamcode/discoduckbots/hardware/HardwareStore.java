@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.discoduckbots.hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -32,7 +33,7 @@ public class HardwareStore {
     public DcMotor coneTurret;
     public DcMotor coneLift;
     public Servo coneGrabber;
-    //public RevBlinkinLedDriver ledDriver;
+    public RevBlinkinLedDriver ledDriver;
 
     public HardwareStore(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode opMode) {
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -42,11 +43,14 @@ public class HardwareStore {
          coneTurret = hardwareMap.get(DcMotor.class, "coneTurret");
          coneLift = hardwareMap.get(DcMotor.class, "coneLift");
          coneGrabber= hardwareMap.get(Servo.class, "coneGrabber");
+        ledDriver = hardwareMap.get(RevBlinkinLedDriver.class, "led");
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+
 
         // frontRight.setDirection(DcMotorEx.Direction.FORWARD);
        //  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
-        //turretSensor = hardwareMap.get(TouchSensor.class, "turretSensor");
+        turretSensor = hardwareMap.get(TouchSensor.class, "resetSensor");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         //distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensorRight");
 
@@ -97,7 +101,7 @@ public class HardwareStore {
 
     public WebcamName getWebcam() {return webcam;}
 
-   // public RevBlinkinLedDriver getLedDriver() { return ledDriver;}
+   public RevBlinkinLedDriver getLedDriver() { return ledDriver;}
 
     public DcMotor getConeLift() {
         return coneLift;
