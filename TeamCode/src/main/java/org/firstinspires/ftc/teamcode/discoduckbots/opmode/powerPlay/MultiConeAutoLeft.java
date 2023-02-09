@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+@Disabled
 @Autonomous(name="MultiConeAutoLeft", group="Robot")
 public class MultiConeAutoLeft extends LinearOpMode{
 

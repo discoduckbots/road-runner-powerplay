@@ -57,8 +57,8 @@ public class newMultiConeAutoLeft extends LinearOpMode{
         Pose2d POLE_POSITION_VERTICAL = new Pose2d(39.38, -4.75, Math.toRadians(0));
         Pose2d POLE_POSITION_STRAFE = new Pose2d(39.38, -3.5, Math.toRadians(0));
         Pose2d PUSH_SLEEVE_CONE_TO_POSITION = new Pose2d(55.63, 0, 0);
-        Pose2d COME_BACK_AFTER_PUSH_SLEEVE_CONE_POSITION = new Pose2d(50.7872, 0, 0);
-        Pose2d GRAB_STACK = new Pose2d(50, 21.21, Math.toRadians(92));
+        Pose2d COME_BACK_AFTER_PUSH_SLEEVE_CONE_POSITION = new Pose2d(48.2872, 0, 0);
+        Pose2d GRAB_STACK = new Pose2d(48.2872, 22.21, Math.toRadians(92));
         Pose2d DROP_STACK_BACK = new Pose2d(47.2872, -16.212, Math.toRadians(92));
         Pose2d DROP_STACK_POS = new Pose2d(50.7872, -15.1955, Math.toRadians(92));
 
@@ -177,6 +177,9 @@ public class newMultiConeAutoLeft extends LinearOpMode{
 
             //drive.followTrajectory(strafePreload);
             coneArm.open();
+
+            Log.d("POLE CLOSE" , "after open");
+
             sleep(250);
 
             //drive.followTrajectory(strafeBackPreload);
