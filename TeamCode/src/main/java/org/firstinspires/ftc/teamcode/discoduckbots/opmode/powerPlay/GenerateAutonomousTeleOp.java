@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.discoduckbots.opmode.powerPlay;
 
+import android.os.Environment;
 import android.util.Log;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -48,6 +49,11 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -253,7 +259,7 @@ public class GenerateAutonomousTeleOp extends LinearOpMode {
         Pose2d newEnd= new Pose2d (0,0,0);
         Trajectory firstTrajectory = drive.trajectoryBuilder(arrayList.get(arrayList.size() - 1).end())
                 .lineToLinearHeading( newEnd,
-                velocityConstraint, accelerationConstraint)
+                        velocityConstraint, accelerationConstraint)
                 .build();
 
         Log.d("GEN", "Moving to " + firstTrajectory);
@@ -262,8 +268,137 @@ public class GenerateAutonomousTeleOp extends LinearOpMode {
             Log.d("GEN", "Moving to " + trajectory);
             drive.followTrajectory(trajectory);
         }
+        try {
+            printStatement(arrayList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("AUT", ":exception writing");
+        }
+
     }
 
+    public void printStatement(ArrayList<Trajectory> arrayList) throws IOException {
+        File path =Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(path, "GeneratedAutonomous.java");
+        Log.d("AUT", "filepath " + file.getAbsolutePath());
+        FileWriter writer = new FileWriter(file);
+        try {
+            String AUTONOMOUS = "package org.firstinspires.ftc.teamcode.discoduckbots.opmode.powerPlay;\n" +
+                    "\n" +
+                    "import android.util.Log;\n" +
+                    "\n" +
+                    "import com.acmerobotics.roadrunner.geometry.Pose2d;\n" +
+                    "import com.acmerobotics.roadrunner.trajectory.Trajectory;\n" +
+                    "import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;\n" +
+                    "import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;\n" +
+                    "import com.qualcomm.robotcore.eventloop.opmode.Autonomous;\n" +
+                    "import com.qualcomm.robotcore.eventloop.opmode.Disabled;\n" +
+                    "import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\n" +
+                    "import com.qualcomm.robotcore.hardware.DcMotor;\n" +
+                    "import com.qualcomm.robotcore.hardware.Servo;\n" +
+                    "import com.qualcomm.robotcore.util.ElapsedTime;\n" +
+                    "\n" +
+                    "import org.firstinspires.ftc.robotcore.external.Telemetry;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeArm;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.ConeDetector;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.HardwareStore;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;\n" +
+                    "import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;\n" +
+                    "import org.firstinspires.ftc.teamcode.drive.DriveConstants;\n" +
+                    "import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;\n" +
+                    "\n" +
+                    "@Disabled\n" +
+                    "@Autonomous(name=\"Generated\", group=\"Robot\")\n" +
+                    "public class GeneratedAutonomous extends LinearOpMode{\n" +
+                    "\n" +
+                    "    private static final double STRAFE_SPEED = .5 ;\n" +
+                    "    private ElapsedTime runtime = new ElapsedTime();\n" +
+                    "    private MecanumDrivetrain mecanumDrivetrain = null;\n" +
+                    "    private ConeArm coneArm = null;\n" +
+                    "    TensorFlow tensorFlow = null;\n" +
+                    "    private static final double AUTONOMOUS_SPEED = 1;\n" +
+                    "\n" +
+                    "    private static final double ROTATION_SPEED = 0.4;\n" +
+                    "    private static final int WOBBLE_GRABBER_REVOLUTIONS = 6250;\n" +
+                    "\n" +
+                    "    @Override\n" +
+                    "    public void runOpMode() {\n" +
+                    "        HardwareStore hardwareStore = new HardwareStore(hardwareMap, telemetry, this);\n" +
+                    "        mecanumDrivetrain = hardwareStore.getMecanumDrivetrain();\n" +
+                    "        DcMotor coneLift = hardwareStore.getConeLift();\n" +
+                    "        DcMotor coneTurret = hardwareStore.getConeTurret();\n" +
+                    "        Servo coneGrabber = hardwareStore.getConeGrabber();\n" +
+                    "        ConeArm coneArm = new ConeArm(coneLift, coneGrabber, coneTurret, this);\n" +
+                    "        ConeDetector coneDetector = new ConeDetector(hardwareStore.getWebcam(), hardwareMap, telemetry);\n" +
+                    "        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);\n" +
+                    "        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);\n" +
+                    "        /** Wait for the game to begin */\n" +
+                    "        telemetry.addData(\">\", \"Press Play to start op mode\");\n" +
+                    "        telemetry.update();\n" +
+                    "\n" +
+                    "        TrajectoryVelocityConstraint velocityConstraint = SampleMecanumDrive.getVelocityConstraint(DriveConstants.MAX_VEL/AUTONOMOUS_SPEED,\n" +
+                    "                DriveConstants.MAX_ANG_VEL/AUTONOMOUS_SPEED,\n" +
+                    "                DriveConstants.TRACK_WIDTH);\n" +
+                    "        TrajectoryAccelerationConstraint accelerationConstraint =\n" +
+                    "        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL/AUTONOMOUS_SPEED);\n";
+
+            String AUTONOMOUS_PART2 = "        waitForStart();\n" +
+                    "\n" +
+                    "        if (opModeIsActive()) {\n";
+            String AUTONOMOUS_PART3 = "       }\n" +
+                    "    }\n" +
+                    "}\n";
+            writer.append(AUTONOMOUS);
+
+
+
+            String TRAJ_CODE = "        Trajectory trajectory_INDEX = drive.trajectoryBuilder(START)" +
+                    ".lineToLinearHeading( new Pose2d(XPOS,YPOS,ZPOS), " +
+                    "velocityConstraint, accelerationConstraint)" +
+                    ".build();\n";
+
+            StringBuilder code = new StringBuilder();
+
+            for (int i = 0; i < arrayList.size(); i++) {
+                String newValue = " ";
+                String startReplacement;
+                if (i == 0) {
+                    startReplacement = "drive.getPoseEstimate()";
+                } else {
+                    startReplacement = "trajectory_INDEX.end()".replace("INDEX", (i - 1) + "");
+                }
+                newValue = TRAJ_CODE.replace("INDEX", i + "");
+                newValue = newValue.replace("START", startReplacement);
+                newValue = newValue.replace("XPOS", arrayList.get(i).end().getX() + "  ");
+                newValue = newValue.replace("YPOS", arrayList.get(i).end().getY() + " ");
+                newValue = newValue.replace("ZPOS", arrayList.get(i).end().getHeading() + " ");
+                writer.append(newValue);
+            }
+
+            writer.append(AUTONOMOUS_PART2);
+            String FOLLOW = "        drive.followTrajectory(trajectory_INDEX);\n";
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                String newerValue = " ";
+                newerValue = FOLLOW.replace("INDEX", i + " ");
+
+                writer.append(newerValue);
+            }
+
+            writer.append(AUTONOMOUS_PART3);
+        } catch (Exception e) {
+            Log.d("AUT", ":exception writing");
+        }
+        finally {
+            try {
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                Log.d("AUT", ":exception writing");
+                e.printStackTrace();
+            }
+        }
+    }
     private void addAutonomousPoint( SampleMecanumDrive drive  ) {
 
         Pose2d poseEstimate = drive.getPoseEstimate();
@@ -280,8 +415,8 @@ public class GenerateAutonomousTeleOp extends LinearOpMode {
                         velocityConstraint, accelerationConstraint)
                 .build();
 
-                arrayList.add(trajectory);
-                Log.d("GEN", "Adding Pos " + start + " to " + arrayList.size());
+        arrayList.add(trajectory);
+        Log.d("GEN", "Adding Pos " + start + " to " + arrayList.size());
     }
 
     private void shutDown(){

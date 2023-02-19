@@ -69,9 +69,9 @@ import org.firstinspires.ftc.teamcode.util.Encoder;
 public class MecanumOdometryTeleOp extends LinearOpMode {
 
     private static final double DISTANCE_TO_POLE = 100;
-    private static double THROTTLE = 0.7;
-    private static double STRAFE_THROTTLE = 0.7;
-    private static double TURN_THROTTLE = 0.7;
+    private static double THROTTLE = 0.55;
+    private static double STRAFE_THROTTLE = 0.35;
+    private static double TURN_THROTTLE = 0.35;
     private static double intakeSpeed = .81;
     private static final double ARM_SPEED = 1;
 

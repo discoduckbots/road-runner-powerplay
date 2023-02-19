@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.discoduckbots.opmode.powerPlay;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.discoduckbots.hardware.MecanumDrivetrain;
 import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 
 @Autonomous(name="tfAutonomous", group="Robot")
+
 public class TfAutonomous extends LinearOpMode{
 
     private static final double STRAFE_SPEED = .5 ;

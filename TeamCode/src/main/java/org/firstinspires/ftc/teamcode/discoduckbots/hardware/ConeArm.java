@@ -20,8 +20,8 @@ public class ConeArm {
     private int currentPosition = 0;
 
     public static final int STACK_1 = 378;
-    public static final int STACK_2 = 255;
-    public static final int STACK_3 = 140;
+    public static final int STACK_2 = 275;
+    public static final int STACK_3 = 165;
     public static final int STACK_4 = 50;
     public static final int STACK_5 = 0;
 
@@ -30,7 +30,7 @@ public class ConeArm {
         this.coneGrabber = coneGrabber;
         this.coneTurret = coneTurret;
         this.opMode = opMode;
-        coneLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        coneLift.setDirection(DcMotorSimple.Direction.FORWARD);
         coneLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         coneLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         coneLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
