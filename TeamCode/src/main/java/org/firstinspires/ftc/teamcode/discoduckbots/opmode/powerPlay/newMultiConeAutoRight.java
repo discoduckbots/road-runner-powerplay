@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -22,8 +23,8 @@ import org.firstinspires.ftc.teamcode.discoduckbots.sensors.TensorFlow;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@Autonomous(name="newMultiConeAutoRight", group="Robot")
-public class newMultiConeAutoRight extends LinearOpMode{
+@Autonomous(name="newMultiConeAutoLeft", group="Robot")
+public class newMultiConeAutoLeft extends LinearOpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
     private MecanumDrivetrain mecanumDrivetrain = null;
@@ -53,13 +54,15 @@ public class newMultiConeAutoRight extends LinearOpMode{
         TrajectoryAccelerationConstraint accelerationConstraint =
         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL * AUTONOMOUS_SPEED);
 
-        Pose2d POLE_POSITION_VERTICAL = new Pose2d(38.38, 4.75, Math.toRadians(0));
+        Pose2d POLE_POSITION_VERTICAL = new Pose2d(38.5, -4, Math.toRadians(0));
         Pose2d POLE_POSITION_STRAFE = new Pose2d(39.38, -3.5, Math.toRadians(0));
         Pose2d PUSH_SLEEVE_CONE_TO_POSITION = new Pose2d(55.63, 0, 0);
-        Pose2d COME_BACK_AFTER_PUSH_SLEEVE_CONE_POSITION = new Pose2d(50.7872, 0, 0);
-        Pose2d GRAB_STACK = new Pose2d(50, -21.21, Math.toRadians(-88));
-        Pose2d DROP_STACK_BACK = new Pose2d(47.2872, 16.212, Math.toRadians(-88));
-        Pose2d DROP_STACK_POS = new Pose2d(50.7872, 15.1955, Math.toRadians(-88));
+        Pose2d COME_BACK_AFTER_PUSH_SLEEVE_CONE_POSITION = new Pose2d(47.66, 0, 0);
+        Pose2d GRAB_STACK = new Pose2d(47.66, 22.21, Math.toRadians(92));
+        Pose2d DROP_STACK_BACK = new Pose2d(47.2872, -14.8, Math.toRadians(92));
+        Pose2d DROP_STACK_POS1 = new Pose2d(46.25, -14.8, Math.toRadians(92));
+        Pose2d DROP_STACK_POS = new Pose2d(45.66, -14.8, Math.toRadians(92));
+
 
 
         // place initial cone
@@ -80,7 +83,7 @@ public class newMultiConeAutoRight extends LinearOpMode{
                 .build();
 
         // go to pick up cup 1
-        Trajectory grabStack1 = drive.trajectoryBuilder(comeBackAfterPushSignal.end().plus(new Pose2d(0,0,Math.toRadians(-88))))
+        Trajectory grabStack1 = drive.trajectoryBuilder(comeBackAfterPushSignal.end().plus(new Pose2d(0,0,Math.toRadians(92))))
                 .lineToLinearHeading( GRAB_STACK,
                         velocityConstraint, accelerationConstraint)
                 .build();
@@ -98,15 +101,15 @@ public class newMultiConeAutoRight extends LinearOpMode{
 
         // drop cup 2
         Trajectory dropStack2Back = drive.trajectoryBuilder(grabStack2.end())
-                .lineToLinearHeading( DROP_STACK_BACK,
+                .lineToLinearHeading( DROP_STACK_POS,
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory dropStack2Strafe = drive.trajectoryBuilder(dropStack2Back.end())
-                .strafeRight(2,
+                .strafeLeft(2,
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory dropStack2StrafeBack = drive.trajectoryBuilder(dropStack2Strafe.end())
-                .strafeLeft(2,
+                .strafeRight(2,
                         velocityConstraint, accelerationConstraint)
                 .build();
 
@@ -119,15 +122,15 @@ public class newMultiConeAutoRight extends LinearOpMode{
 
         // drop cup 3
         Trajectory dropStack3Back = drive.trajectoryBuilder(grabStack3.end())
-                .lineToLinearHeading( DROP_STACK_BACK,
+                .lineToLinearHeading( DROP_STACK_POS1,
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory dropStack3Strafe = drive.trajectoryBuilder(dropStack3Back.end())
-                .strafeRight(2,
+                .strafeLeft(2,
                         velocityConstraint, accelerationConstraint)
                 .build();
         Trajectory dropStack3StrafeBack = drive.trajectoryBuilder(dropStack3Strafe.end())
-                .strafeLeft(2,
+                .strafeRight(2,
                         velocityConstraint, accelerationConstraint)
                 .build();
 
@@ -170,13 +173,16 @@ public class newMultiConeAutoRight extends LinearOpMode{
 
             // Drop the preload
             coneArm.liftToMedium();
-            coneArm.pivotLeft90();
             drive.followTrajectory(dropPreload);
             Pose2d currPos = drive.getPoseEstimate();
             Log.d("POLE POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
 
             //drive.followTrajectory(strafePreload);
+            sleep(250);
             coneArm.open();
+
+            Log.d("POLE CLOSE" , "after open");
+
             sleep(250);
 
             //drive.followTrajectory(strafeBackPreload);
@@ -195,7 +201,7 @@ public class newMultiConeAutoRight extends LinearOpMode{
             coneArm.pivotCenter();
             sleep(450); // WHY DO WE NEED THIS SLEEP ?
             coneArm.liftByEncoder(ConeArm.STACK_1);
-            drive.turn(Math.toRadians(-88));
+            drive.turn(Math.toRadians(92));
             drive.followTrajectory(grabStack1);
             coneArm.close();
             currPos = drive.getPoseEstimate();
@@ -203,7 +209,7 @@ public class newMultiConeAutoRight extends LinearOpMode{
             sleep(250);
             coneArm.liftToMedium();
             sleep(300);
-            coneArm.pivotRight90();
+            coneArm.pivotLeft90();
 
             // Go to drop the stack 1 cone
             drive.followTrajectory(dropStack1Back);
@@ -213,7 +219,7 @@ public class newMultiConeAutoRight extends LinearOpMode{
             coneArm.open();
 
             // Go to pick up second stack cone
-            sleep(250);
+            sleep(350);
             coneArm.pivotCenter();
             coneArm.liftByEncoder(ConeArm.STACK_2);
             drive.followTrajectory(grabStack2);
@@ -222,11 +228,11 @@ public class newMultiConeAutoRight extends LinearOpMode{
             coneArm.close();
             sleep(250);
             coneArm.liftToMedium();
-            sleep(300);
-            coneArm.pivotRight90();
+            sleep(250);
+            coneArm.pivotLeft90();
 
             // Go to drop second stack cone
-            drive.followTrajectory(dropStack1Back);
+            drive.followTrajectory(dropStack3Back);
             currPos = drive.getPoseEstimate();
             Log.d("2 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
 
@@ -234,7 +240,7 @@ public class newMultiConeAutoRight extends LinearOpMode{
             coneArm.open();
 
             //Go to grab third stack cone
-            sleep(250);
+            sleep(350);
             coneArm.pivotCenter();
             coneArm.liftByEncoder(ConeArm.STACK_3);
             drive.followTrajectory(grabStack3);
@@ -243,11 +249,11 @@ public class newMultiConeAutoRight extends LinearOpMode{
             coneArm.close();
             sleep(250);
             coneArm.liftToMedium();
-            sleep(300);
-            coneArm.pivotRight90();
+            sleep(250);
+            coneArm.pivotLeft90();
 
             // Go to drop third stack cone
-            drive.followTrajectory(dropStack1Back);
+            drive.followTrajectory(dropStack2Back);
             currPos = drive.getPoseEstimate();
             Log.d("3 Drop POS:", "x: " + currPos.getX() + "y: " + currPos.getY() + "h: " + Math.toDegrees(currPos.getHeading()));
 
